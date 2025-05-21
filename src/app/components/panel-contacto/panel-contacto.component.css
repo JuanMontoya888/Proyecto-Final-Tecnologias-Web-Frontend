@@ -1,0 +1,117 @@
+.container {
+    
+  background: radial-gradient(circle, #0d1b2a, #1b263b);
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+      border-radius: 12px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+h3.text-center {
+    
+  font-size: 2rem;
+  
+  color: var(--blanco);
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #3498db;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 0.5rem;
+}
+
+mat-card {
+    
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+mat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+mat-card-header {
+  
+  display: flex;
+  justify-content: center;
+  background-color: var(--azuloscuro);
+  color: var(--blanco);
+  padding: 1rem;
+}
+
+mat-card-title {
+  display: flex;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+mat-card-subtitle {
+  
+  display: flex;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--blanco);
+}
+
+mat-card-content p {
+  font-size: 1rem;
+  color: var(--azulgrisf);
+}
+
+ul {
+  padding-left: 20px;
+  margin-top: 0.5rem;
+}
+
+ul li {
+  font-size: 1rem;
+  color: var(--azulgrisf);
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+  background-color: #f5f7fa;
+}
+
+button[mat-button] {
+  background-color: var(--blanco);
+  color: var(--azuloscuro);
+  font-weight: 600;
+  text-transform: none;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+button[mat-button]:hover {
+   transform: translateY(-3px);
+  color: var(--blanco);
+  background: red;
+}
+
+.alert {
+  background-color: var(--blanco);
+  color: var(--azulgrisf);
+  padding: 1rem;
+  border-radius: 8px;
+  width: 100%;
+  text-align: center;
+  font-size: 1rem;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  width: 80px;
+  height: 7px;
+  background-color: #e74c3c; 
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
