@@ -17,14 +17,21 @@ export class LoginComponent {
   constructor(private adminService: AdminService, private router: Router) {}
 
   login() {
-    const admin = this.adminService.login(this.username, this.password);
+    let admin;
+    // Nos subscribimos al observable para cuando nos llegue el elemento este mande a 
+    // llamar la callback
+    this.adminService.login(this.username, this.password).subscribe((res: any) => {
+      admin = res['user'];
+      console.log(admin);
 
-    if (admin) {
-      localStorage.setItem('adminLogueado', JSON.stringify(admin));
-      Swal.fire('¡Bienvenido!', `Hola ${admin.nombre}`, 'success');
-      this.router.navigate(['/']);
-    } else {
-      Swal.fire('Error', 'Usuario o contraseña incorrectos', 'error');
-    }
+      if (admin) {
+        localStorage.setItem('adminLogueado', JSON.stringify(admin));
+        Swal.fire('¡Bienvenido!', `Hola ${admin['nombre']}`, 'success');
+        this.router.navigate(['/']);
+      } else {
+        Swal.fire('Error', 'Usuario o contraseña incorrectos', 'error');
+      }
+    });
+
   }
 }
