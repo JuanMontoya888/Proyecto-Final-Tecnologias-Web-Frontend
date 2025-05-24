@@ -1,0 +1,120 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 30px;
+  background: linear-gradient(145deg, #ffffff, #f0f0f5);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+h2, h3, h4, h5 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  color: var(--azulgris);
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+p, li {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  color: #4a4a4a;
+  line-height: 1.8;
+}
+
+.accordion-button {
+  background-color: var(--blanco);
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--azulgris);
+  transition: background 0.3s ease, transform 0.2s ease;
+  padding: 14px 18px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.accordion-button:hover {
+  background-color: var(--blanco);
+  transform: translateY(-2px);
+}
+
+.accordion-button:not(.collapsed) {
+  color: var(--azuloscuro);
+  background-color: var(--blanco);
+  font-weight: 600;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+
+.accordion-item {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.accordion-item:hover {
+  transform: scale(1.01);
+}
+
+.accordion-body {
+  background-color: var(--blanco);
+  color: #444;
+  padding: 20px;
+}
+
+.text-center h5 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-top: 24px;
+  color:var(--azulgris);
+}
+
+.text-center ul {
+  padding: 0;
+  list-style-type: none;
+}
+
+.text-center li {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  color: var(--azulgris);
+}
+
+.text-center li i {
+  font-size: 1.4rem;
+  margin-right: 12px;
+  transition: color 0.3s;
+}
+
+.text-center li i:hover {
+  color: var(--azuloscuro);
+}
+
+.text-center a {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--azulgris);
+  text-decoration: none;
+  transition: color 0.3s, transform 0.2s;
+}
+
+.text-center a:hover {
+  color: #8e44ad;
+  transform: translateY(-2px);
+}
+
+.text-center a:active {
+  color: #34495e;
+}
+
+.text-center i {
+  margin-right: 0.5rem;
+  transition: transform 0.2s;
+}
+
+.text-center a:hover i {
+  transform: rotate(10deg) scale(1.1);
+}

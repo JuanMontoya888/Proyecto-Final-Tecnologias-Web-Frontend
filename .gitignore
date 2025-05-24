@@ -137,3 +137,9 @@ dist
 
 #angular cache
 .angular/
+
+# ───── FIREBASE ─────
+firestore-key.json
+.env
+.env.local
+.env.*.local

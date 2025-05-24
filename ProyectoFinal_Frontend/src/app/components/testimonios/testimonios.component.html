@@ -1,0 +1,47 @@
+<section class="container my-5">
+  <h2 class="text-center mb-4">Opiniones de nuestros usuarios</h2>
+
+  @if (testimonios.length === 0) {
+    <div class="alert alert-info text-center">
+      No hay comentarios aún. ¡Sé el primero en compartir tu experiencia!
+    </div>
+  }
+
+  <div class="row">
+    @for (t of testimonios; track t; let i = $index) {
+      <div class="col-md-4 mb-3">
+        <div class="card h-100 shadow"
+        [ngClass]="{ 'bg-color-1': i % 2 === 0, 'bg-color-2': i % 2 !== 0 }">
+          <div class="card-body">
+            <h5 class="title">{{ t.nombre | capitalizar }}</h5>
+            <p class="card-text">{{ t.comentario | oracion }}</p>
+            <p class="text-warning">{{ t.estrellas | estrellas }}</p>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <hr class="my-4">
+
+  <form (ngSubmit)="agregarTestimonio()" class="row g-3">
+    <div class="col-md-4">
+      <input [(ngModel)]="nuevo.nombre" name="nombre" class="form-control" placeholder="Tu nombre" required>
+    </div>
+    <div class="col-md-4">
+      <input [(ngModel)]="nuevo.comentario" name="comentario" class="form-control" placeholder="Comentario" required>
+    </div>
+    <div class="col-md-2">
+      <select [(ngModel)]="nuevo.estrellas" name="estrellas" class="form-select" required>
+        <option [value]="1">1 estrella</option>
+        <option [value]="2">2 estrellas</option>
+        <option [value]="3">3 estrellas</option>
+        <option [value]="4">4 estrellas</option>
+        <option [value]="5">5 estrellas</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-success w-100">Agregar</button>
+    </div>
+  </form>
+</section>

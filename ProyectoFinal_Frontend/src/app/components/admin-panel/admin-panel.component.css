@@ -1,0 +1,66 @@
+/* Estilo principal para la sección del panel */
+.admin-panel-bg {
+  color: var(--azulgrisf);
+  
+  background: radial-gradient(circle, #0d1b2a, #1b263b);
+  min-height: 100vh;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);  
+}
+
+h4.text-muted  {
+  color: white;  
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.control-btn {
+  border-radius: 12px;
+  background: #6c63ff;
+  color: white;
+  transition: transform 0.3s ease, background 0.3s ease;
+  font-weight: 600;
+  padding: 0.8rem 1.5rem;
+}
+
+.control-btn:hover {
+  transform: translateY(-3px);
+  background: #5a55d6;
+  color: white;
+}
+
+
+.alert {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+}
+
+h2 {
+  color: #34495e;  
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+  background-image: linear-gradient(to right, #34495e, #2c3e50);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  width: 80px;
+  height: 7px;
+  background-color: #e74c3c; 
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
