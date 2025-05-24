@@ -1,0 +1,27 @@
+<mat-card class="mb-4">
+    <img mat-card-image [src]="'assets/img/hoteles/' + hotel.imagen" alt="Imagen de {{ hotel.nombre }}" />
+    <mat-card-header>
+      <mat-card-title>{{ hotel.nombre }}</mat-card-title>
+      <mat-card-subtitle>{{ hotel.ciudad }} - {{ hotel.tipoHotel }}</mat-card-subtitle>
+    </mat-card-header>
+  
+    <mat-card-content>
+      <p><strong>Categoría:</strong>
+        @for (i of [].constructor(hotel.categoria); track $index) {
+          <mat-icon color="warn">star</mat-icon>
+        }
+      </p>
+      <p><strong>Precio base:</strong> ${{ hotel.precio }}</p>
+      <p><strong>Servicios:</strong></p>
+      <ul>
+        @for (servicio of hotel.servicios; track $index) {
+          <li><mat-icon>check</mat-icon> {{ servicio }}</li>
+        }
+      </ul>
+    </mat-card-content>
+  
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="irAReservacion()">Reservar</button>
+    </mat-card-actions>
+  </mat-card>
+  

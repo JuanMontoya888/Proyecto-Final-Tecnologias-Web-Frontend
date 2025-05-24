@@ -1,0 +1,117 @@
+.space-bg {
+  background: radial-gradient(circle, #0d1b2a, #1b263b);
+  min-height: 100vh;
+}
+
+.space-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  color: var(--azulgris);
+}
+
+.space-card mat-card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.space-btn {
+  border-radius: 12px;
+  background: var(--blanco);
+  color: var(--blanco);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.space-btn:hover {
+  transform: translateY(-3px);
+  color: var(--blanco);
+  background: red;
+}
+
+mat-card {
+    
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+mat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+mat-card-header {
+  background-color: var(--azuloscuro);
+  color: var(--blanco);
+  padding: 1rem;
+}
+
+mat-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+mat-card-subtitle {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--blanco);
+}
+
+mat-card-content p {
+  font-size: 1rem;
+  color: var(--azulgrisf);
+}
+
+ul {
+  padding-left: 20px;
+  margin-top: 0.5rem;
+}
+
+ul li {
+  font-size: 1rem;
+  color: var(--azulgrisf);
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+  background-color: #f5f7fa;
+}
+
+button[mat-raised-button] {
+  color: var(--azuloscuro);
+  font-weight: 600;
+  text-transform: none;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+button[mat-raised-button]:hover {
+   transform: translateY(-3px);
+  color: var(--blanco);
+  background: red;
+}
+
+.alert {
+  background-color: var(--blanco);
+  color: var(--azulgrisf);
+  padding: 1rem;
+  border-radius: 8px;
+  width: 100%;
+  text-align: center;
+  font-size: 1rem;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  width: 80px;
+  height: 7px;
+  background-color: #e74c3c; 
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
