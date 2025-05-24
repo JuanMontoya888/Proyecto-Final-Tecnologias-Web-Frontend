@@ -1,0 +1,93 @@
+<div class="container mt-4">
+  <h2>Reservación para {{ hotel.nombre }}</h2>
+
+  <form [formGroup]="reservacionForm" (ngSubmit)="enviar()">
+
+
+    <mat-form-field appearance="fill" class="w-100 mb-3">
+      <mat-label>Nombre completo</mat-label>
+      <input matInput formControlName="nombre" required>
+      @if (reservacionForm.get('nombre')?.touched || reservacionForm.get('nombre')?.dirty) {
+        @if (reservacionForm.get('nombre')?.hasError('required')) {
+          <mat-error>El nombre es obligatorio.</mat-error>
+        }
+        @if (reservacionForm.get('nombre')?.hasError('minlength')) {
+          <mat-error>Debe tener al menos 3 caracteres.</mat-error>
+        }
+        @if (reservacionForm.get('nombre')?.hasError('nombreCompleto')) {
+          <mat-error>{{ reservacionForm.get('nombre')?.getError('nombreCompleto') }}</mat-error>
+        }
+      }
+    </mat-form-field>
+    
+
+    <mat-form-field appearance="fill" class="w-100 mb-3">
+      <mat-label>Tipo de habitación</mat-label>
+      <mat-select formControlName="tipoHabitacion" required>
+        @for (tipo of tiposHabitacion; track $index) {
+          <mat-option [value]="tipo">{{ tipo }}</mat-option>
+        }
+      </mat-select>
+      @if (reservacionForm.get('tipoHabitacion')?.touched) {
+        @if (reservacionForm.get('tipoHabitacion')?.hasError('required')) {
+          <mat-error>Selecciona un tipo de habitación.</mat-error>
+        }
+      }
+    </mat-form-field>
+
+    <div class="mb-3">
+      <label><strong>Servicios adicionales ({{ hotel.precioServicio }} cada uno):</strong></label>
+      <div formGroupName="serviciosSeleccionados">
+        @for (servicio of hotel.servicios; track $index) {
+          <mat-checkbox [formControlName]="servicio" (change)="calcularTotal()">
+            {{ servicio }}
+          </mat-checkbox><br>
+        }
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label><strong>Método de pago:</strong></label><br>
+      <mat-radio-group formControlName="metodoPago">
+        <mat-radio-button value="Tarjeta">Tarjeta</mat-radio-button>
+        <mat-radio-button value="Efectivo" class="ms-3">Efectivo</mat-radio-button>
+      </mat-radio-group>
+      @if (reservacionForm.get('metodoPago')?.touched) {
+        @if (reservacionForm.get('metodoPago')?.hasError('required')) {
+          <mat-error>Selecciona un método de pago.</mat-error>
+        }
+      }
+    </div>
+
+    <!-- Fechas -->
+    <mat-form-field appearance="fill" class="w-100 mb-3">
+      <mat-label>Fecha de inicio</mat-label>
+      <input matInput [matDatepicker]="inicioPicker" formControlName="fechaInicio" [min]="minDate" [max]="maxDate">
+      <mat-datepicker-toggle matSuffix [for]="inicioPicker"></mat-datepicker-toggle>
+      <mat-datepicker #inicioPicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-100 mb-3">
+      <mat-label>Fecha de fin</mat-label>
+      <input matInput [matDatepicker]="finPicker" formControlName="fechaFin" [min]="minDate" [max]="maxDate">
+      <mat-datepicker-toggle matSuffix [for]="finPicker"></mat-datepicker-toggle>
+      <mat-datepicker #finPicker></mat-datepicker>
+    </mat-form-field>
+
+    @if (reservacionForm.errors?.['fechaInvalida']) {
+      <mat-error class="d-block mb-3 text-danger">
+        {{ reservacionForm.errors?.['fechaInvalida'] }}
+      </mat-error>
+    }
+
+    <div class="mt-3">
+      <p><strong>Precio base ({{ hotel.precio }} x noche):</strong> ${{ precioBase }}</p>
+      <p><strong>Servicios seleccionados:</strong> ${{ precioServicios }}</p>
+      <p><strong>Total a pagar:</strong> ${{ precioTotal }}</p>
+    </div>
+
+    <button mat-raised-button color="primary" class="w-100 mt-3" type="submit" [disabled]="reservacionForm.invalid">
+      Confirmar reservación
+    </button>
+  </form>
+</div>

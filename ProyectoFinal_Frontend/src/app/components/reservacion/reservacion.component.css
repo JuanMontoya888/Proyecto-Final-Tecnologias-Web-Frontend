@@ -1,0 +1,170 @@
+.container {
+  background: var(--blanco);
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  color: var(--azulgrisf);
+  max-width: 700px;
+  margin: auto;
+  font-family: 'Poppins', sans-serif;
+  transition: box-shadow 0.3s ease;
+}
+
+.container:hover {
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+}
+
+.container h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--azulgrisf);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--amarillooscuro);
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+/* Estilos de los campos de formulario */
+mat-form-field {
+  background: #f7f9fc;
+  border-radius: 8px;
+  color: var(--azulgrisf);
+}
+
+mat-form-field .mat-label {
+  color: var(--azulgrisf);
+  font-weight: 600;
+}
+
+mat-form-field .mat-input-element {
+  color: var(--azulgrisf);
+  font-size: 1rem;
+}
+
+mat-form-field .mat-error {
+  color: red;
+  font-weight: 600;
+}
+
+mat-form-field .mat-form-field-underline {
+  background-color:var(--amarillooscuro);
+}
+
+mat-select {
+  color:var(--azulgrisf);
+}
+
+mat-select:hover,
+mat-select:focus {
+  background: rgba(243, 156, 18, 0.1);
+}
+
+mat-option {
+  background-color: var(--blanco);
+  color: var(--azulgrisf);
+}
+
+mat-option:hover {
+  background-color: var(--amarillooscuro);
+  color: var(--azulgrisf);
+}
+
+/* Estilos de los checkboxes y radio buttons */
+mat-checkbox .mat-checkbox-label {
+  color: var(--azulgrisf);
+  font-weight: 500;
+}
+
+mat-checkbox.mat-accent .mat-checkbox-background,
+mat-radio-button.mat-accent .mat-radio-outer-circle,
+mat-radio-button.mat-accent .mat-radio-inner-circle {
+  background-color: var(--amarillooscuro);
+  border-color: var(--amarillooscuro);
+}
+
+mat-checkbox.mat-accent .mat-checkbox-checked .mat-checkbox-background,
+mat-radio-button.mat-accent.mat-checked .mat-radio-outer-circle {
+  background-color: var(--amarillooscuro);
+}
+
+mat-checkbox .mat-checkbox-checked .mat-checkbox-background {
+  border-radius: 4px;
+}
+
+/* Estilos del selector de fecha */
+.mat-datepicker-toggle-active {
+  color: var(--amarillooscuro);
+}
+
+.mat-calendar {
+  background: var(--blanco);
+  color: var(--azulgrisf);
+  border: 1px solid #e0e0e0;
+}
+
+.mat-calendar-table-header,
+.mat-calendar-table {
+  color: var(--azulgrisf);
+}
+
+.mat-calendar-table-header button:hover {
+  background: var(--amarillooscuro);
+  color: var(--blanco);
+}
+
+.mat-calendar-table-header .mat-calendar-arrow {
+  color: var(--amarillooscuro);
+}
+
+/* Estilos de los precios */
+.container .mt-3 p {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--azulgrisf);
+}
+
+.container .mt-3 p strong {
+  color: var(--azulgrisf);
+}
+
+
+/* Estilos del botón */
+button[type="submit"] {
+  background-color: var(--amarillooscuro);
+  color: var(--blanco);
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 12px;
+  border-radius: 8px;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+button[type="submit"]:hover {
+  background-color: #e67e22;
+  transform: translateY(-3px);
+}
+
+button[type="submit"]:disabled {
+  background-color: rgba(255, 255, 255, 0.3);
+  cursor: not-allowed;
+}
+
+/* Animación de entrada para el formulario */
+.container {
+  animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,178 @@
+body {
+  font-family: 'Helvetica Neue', sans-serif;
+  background-color: var(--blanco);
+  color: var(--negro);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease-in-out;
+}
+
+h1, h2 {
+  font-weight: 700;
+  color: var(--azulgrisf);
+}
+
+/* Sección principal de búsqueda */
+section.text-center {
+  margin-top: 5rem;
+}
+
+section.text-center h1 {
+  font-size: 3rem;
+  letter-spacing: 1px;
+  font-weight: 700;
+  color: var(--azulgrisf);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+section.text-center input {
+  font-size: 1.2rem;
+  padding: 1rem;
+  width: 50%;
+  border-radius: 50px;
+  border: 1px solid #ddd;
+  background-color: var(--blanco);
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+section.text-center input:focus {
+  border-color: var(--azuloscuro);
+  box-shadow: 0 0 15px rgba(41, 128, 185, 0.2);
+  outline: none;
+}
+
+section.bg-dark {
+  background-color: var(--azulgrisf);
+  color: var(--blanco);
+  padding: 6rem 0;
+  text-align: center;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+section.bg-dark h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+section.bg-dark p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+section.bg-dark .btn-warning {
+  background: linear-gradient(135deg, #f39c12, #f1c40f);
+  border-radius: 30px;
+  font-size: 1.2rem;
+  padding: 1rem 2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(243, 156, 18, 0.2);
+}
+
+section.bg-dark .btn-warning:hover {
+  background: linear-gradient(135deg, #f1c40f, #f39c12);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(243, 156, 18, 0.3);
+}
+
+/* Sección de los hoteles */
+section.container {
+  margin-top: 4rem;
+}
+
+section.container .row {
+  margin-top: 2rem;
+}
+
+section.container .col-md-4 {
+  margin-bottom: 3rem;
+}
+
+section.container .alert {
+  font-size: 1.1rem;
+  background-color: var(--amarillooscuro);
+  color: var(--azulgrisf);
+  border-radius: 8px;
+  padding: 1rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+section.container .alert a {
+  color: var(--azulgrisf);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+/* Estilo de tarjetas de hoteles */
+app-hotel-card {
+  border-radius: 15px;
+  overflow: hidden;
+  background-color: var(--blanco);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+}
+
+app-hotel-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  opacity: 0.98;
+}
+
+app-hotel-card .card-body {
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+app-hotel-card .card-title {
+  font-size: 1.4rem;
+  color: var(--azulgris);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+app-hotel-card .card-text {
+  font-size: 1.1rem;
+  color: var(--gris);
+  margin-bottom: 1rem;
+}
+
+app-hotel-card:hover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(41, 128, 185, 0.15);
+  transition: all 0.3s ease;
+  border-radius: 15px;
+}
+
+app-hotel-card .btn {
+  background-color: #27ae60;
+  border-radius: 25px;
+  color: var(--blanco);
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  display: block;
+  width: 100%;
+  border: none;
+}
+
+app-hotel-card .btn:hover {
+  background-color: #2ecc71;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(39, 174, 96, 0.2);
+}

@@ -1,0 +1,95 @@
+
+.navbar {
+  background: linear-gradient(135deg, #2c3e50, #34495e);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  padding: 10px 0;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+}
+
+.navbar-brand {
+  gap: 20px;
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--blanco) ;
+  transition: color 0.3s ease;
+
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand img{
+  margin-left: 0.5rem;
+}
+
+.navbar-brand:hover {
+  color: var(--amarillooscuro);
+}
+
+.navbar-toggler {
+  border-color:var(--amarillooscuro);
+}
+
+.navbar-toggler-icon {
+  background-color: var(--amarillooscuro);
+}
+
+.navbar-nav .nav-item .nav-link {
+  display: flex;
+  align-items: center;
+  color: var(--blanco);
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 8px 16px;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+  color: var(--amarillooscuro) ;
+  transform: translateY(-3px);
+}
+
+.navbar-nav .nav-item .nav-link:active {
+  color: var(--amarillooscuro) ;
+}
+
+.navbar-nav .nav-item.active .nav-link {
+  color: var(--amarillooscuro) ;
+  font-weight: 700;
+}
+
+.navbar-nav .nav-item .nav-link {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-nav .nav-item .nav-link i {
+  margin-right: 8px;
+}
+
+.navbar-collapse {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.navbar-nav.ms-auto {
+  margin-left: auto;
+}
+
+.navbar-text {
+  font-size: 1rem;
+  color: var(--amarillooscuro);
+  font-weight: 600;
+}
+
+.navbar-text:hover {
+  color: #e67e22;
+}
+
+/* Cambiar el color de fondo al hacer scroll */
+.navbar.scrolled {
+  background: linear-gradient(135deg, #1a252f, #2c3e50);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
