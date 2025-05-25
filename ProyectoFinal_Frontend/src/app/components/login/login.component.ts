@@ -28,11 +28,12 @@ export class LoginComponent {
       this.adminService.login(this.username, this.password).subscribe(
         (res: any) => {
           LoaderService.cerrar();
+          console.log(res);
           const admin = res['user'];
 
           if (admin) {
             localStorage.setItem('adminLogueado', JSON.stringify(admin));
-            Swal.fire('¡Bienvenido!', `Hola ${admin['nombre']}`, 'success');
+            Swal.fire('¡Bienvenido!', `Hola ${admin['name']}`, 'success');
             this.router.navigate(['/']);
           } else {
             Swal.fire('Error', 'Usuario o contraseña incorrectos', 'error');
