@@ -10,28 +10,12 @@ export class AdminService {
   private adminSubject = new BehaviorSubject<any>(this.getAdminLogueado());
   admin$ = this.adminSubject.asObservable();
 
-  // private admins = [
-  //   { username: 'admin1', password: '1234', nombre: 'María González' },
-  //   { username: 'admin2', password: 'abcd', nombre: 'Carlos Pérez' },
-  //   { username: 'admin3', password: '5678', nombre: 'Ana Ramírez' }
-  // ];
-
   constructor(public http: HttpClient) { }
 
   // Retornaremos un observable, para que lo espera hasta que se complete
-  login(username: string, password: string): Observable<any> {
-    // const admin = this.admins.find(
-    //   a => a.username === username && a.password === password
-    // );
-    // if (admin) {
-    //   localStorage.setItem('adminLogueado', JSON.stringify(admin));
-    //   this.adminSubject.next(admin); // Notificamos a todos los que estén suscritos
-    // }
-    // return admin || null;
-
+  login(uid: string): Observable<any> {
     const urapi = 'http://localhost:3000/login';
-    const body = { username, password };
-
+    const body = { uid };
 
     return this.http.post(urapi, body);
   }
