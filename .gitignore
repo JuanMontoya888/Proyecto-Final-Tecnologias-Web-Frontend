@@ -143,3 +143,7 @@ firestore-key.json
 .env
 .env.local
 .env.*.local
+
+# en .gitignore
+ProyectoFinal_Backend/ProjectNodeJS/firestore-key.json
+

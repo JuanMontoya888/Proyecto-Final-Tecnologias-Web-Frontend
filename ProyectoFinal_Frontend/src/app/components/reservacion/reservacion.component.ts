@@ -21,6 +21,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
+import { ReservasService } from '../../services/reservas.service';
 
 
 import Swal from 'sweetalert2';
@@ -91,7 +92,8 @@ export class ReservacionComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private hotelService: HotelService
+    private hotelService: HotelService,
+    private reservas : ReservasService
   ) {}
 
   ngOnInit(): void {
@@ -165,50 +167,50 @@ export class ReservacionComponent implements OnInit {
   }
 
   enviar() {
-    if (this.reservacionForm.valid) {
-      Swal.fire({
-        title: '¿Confirmar reservación?',
-        text: 'Verifica que los datos sean correctos antes de guardar.',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, reservar',
-        cancelButtonText: 'Cancelar'
-      }).then(result => {
-        if (result.isConfirmed) {
-          const datos = this.reservacionForm.value;
+  if (this.reservacionForm.valid) {
+    Swal.fire({
+      title: '¿Confirmar reservación?',
+      text: 'Verifica que los datos sean correctos antes de guardar.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, reservar',
+      cancelButtonText: 'Cancelar'
+    }).then(result => {
+      if (result.isConfirmed) {
+        const datos = this.reservacionForm.value;
 
-          const nuevaReservacion: Reservacion = {
-            nombre: datos.nombre,
-            tipoHabitacion: datos.tipoHabitacion,
-            serviciosSeleccionados: this.obtenerServiciosSeleccionados(),
-            metodoPago: datos.metodoPago,
-            fechaInicio: datos.fechaInicio,
-            fechaFin: datos.fechaFin,
-            hotel: this.hotel.nombre,
-            precioBase: this.precioBase,
-            precioServicios: this.precioServicios,
-            precioTotal: this.precioTotal
-          };
+        const nuevaReservacion: Reservacion = {
+          nombre: datos.nombre,
+          tipoHabitacion: datos.tipoHabitacion,
+          serviciosSeleccionados: this.obtenerServiciosSeleccionados(),
+          metodoPago: datos.metodoPago,
+          fechaInicio: datos.fechaInicio.toISOString(), // Convierte fechas a formato ISO
+          fechaFin: datos.fechaFin.toISOString(),
+          hotel: this.hotel.nombre,
+          precioBase: this.precioBase,
+          precioServicios: this.precioServicios,
+          precioTotal: this.precioTotal
+        };
 
-          const reservacionesGuardadas = localStorage.getItem('reservaciones');
-          const reservaciones: Reservacion[] = reservacionesGuardadas
-            ? JSON.parse(reservacionesGuardadas)
-            : [];
-
-          reservaciones.push(nuevaReservacion);
-          localStorage.setItem('reservaciones', JSON.stringify(reservaciones));
-
-          Swal.fire('¡Reservación completada!', 'Gracias por tu preferencia.', 'success').then(() => {
-            this.reservacionForm.reset();
-            this.precioServicios = 0;
-            this.precioBase = 0;
-            this.precioTotal = 0;
-            this.router.navigate(['/hoteles']);
-          });
-        }
-      });
-    } else {
-      Swal.fire('Error', 'Por favor completa todos los campos correctamente.', 'error');
-    }
+        this.reservas.createPost(nuevaReservacion).subscribe({
+          next: (res: any) => {
+            Swal.fire('¡Reservación completada!', 'Gracias por tu preferencia.', 'success').then(() => {
+              this.reservacionForm.reset();
+              this.precioServicios = 0;
+              this.precioBase = 0;
+              this.precioTotal = 0;
+              this.router.navigate(['/hoteles']);
+            });
+          },
+          error: (error) => {
+            console.error('Error al guardar la reservación:', error);
+            Swal.fire('Error', 'No se pudo guardar la reservación. Intenta de nuevo.', 'error');
+          }
+        });
+      }
+    });
+  } else {
+    Swal.fire('Error', 'Por favor completa todos los campos correctamente.', 'error');
   }
+}
 }
