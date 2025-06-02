@@ -1,0 +1,35 @@
+const express = require('express');
+const router = express.Router();
+const cors = require('cors');
+const admin = require('../firebase');
+
+//Inicializar y obtener referencia al servicio de authentication de firebase
+const db = admin.firestore();
+
+
+router.post('/login', (req, res) => {
+    //Guardamos las credenciales que son recibidas
+    const { uid } = req.body;
+    let admins;
+
+    console.log(uid);
+
+    // Con 'db' mandamos llamar cualquier elemento de la base de datos
+    // estos estan organizados por colecciones, y de ahi por documentos
+    db.collection('users').get().then(data => {
+        admins = data.docs.map(doc => doc.data());
+
+        // console.log(admins);
+
+        // Asignamos los datos que enviamos ocultos a este tipo de dato
+        const { username, password } = req.body;
+        // De los datos obtenidos de la bd buscamos los que coincidan con las credenciales
+        const found = admins.find(u => u.UID === uid) || null;
+
+        //     //por ultimo enviamos una respuesta al cliente
+        res.json({ user: found });
+    });
+
+});
+
+module.exports = router;

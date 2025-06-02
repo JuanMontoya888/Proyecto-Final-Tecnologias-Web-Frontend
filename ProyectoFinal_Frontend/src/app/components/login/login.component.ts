@@ -6,6 +6,7 @@ import { LoaderService } from '../../services/loader.service';
 
 import Swal from 'sweetalert2';
 import { AuthenticateService } from '../../services/authenticate.service';
+import { HotelService } from '../../services/hotel.service';
 
 @Component({
   selector: 'app-login',
@@ -16,8 +17,17 @@ import { AuthenticateService } from '../../services/authenticate.service';
 export class LoginComponent {
   username: string = '';
   password: string = '';
+  isLogging: boolean = false;
+  email: string = '';
+  passwordRegister: string = '';
+  name: string = '';
+  lastName: string = '';
 
-  constructor(private adminService: AdminService, private router: Router, private authService: AuthenticateService) { }
+  constructor(private adminService: AdminService, private router: Router, private authService: AuthenticateService, private receiveData: HotelService) { }
+
+  ngOnInit(): void {
+    this.receiveData.data$.subscribe(data => this.isLogging = data);
+  }
 
   //Logueo por email
   loginWithEmail(): void {
@@ -30,7 +40,6 @@ export class LoginComponent {
 
     this.authService.loginWithEmail(this.username, this.password)
       .then((uid) => {
-        LoaderService.cerrar();
 
         localStorage.setItem('adminLogueado', JSON.stringify(this.username));
         this.router.navigate(['/']);
@@ -45,24 +54,28 @@ export class LoginComponent {
         }
 
       });
-
-
   }
 
   // This function will be used to get values of user, it can be logued with Email and password or another
   // This function to receive userData, this userData will come since firebase
   getUserDB(uid: string): void {
-            console.log(uid)
 
     this.adminService.login(uid).subscribe(
       (res: any) => {
         LoaderService.cerrar();
         console.log(res);
         const admin = res['user'];
+
         if (admin) {
           localStorage.setItem('adminLogueado', JSON.stringify(admin));
-          Swal.fire('¡Bienvenido!', `Hola ${admin['name']}`, 'success');
+
+          LoaderService.cerrar();
+          Swal.fire('¡Bienvenido!', `Hola ${admin['name']}`, 'success').then(() => {
+            window.location.reload();
+          });
+          
           this.router.navigate(['/']);
+
         }
       },
       (error) => {
@@ -73,4 +86,7 @@ export class LoginComponent {
   }
 
 
+  createRegister(): void {
+
+  }
 }

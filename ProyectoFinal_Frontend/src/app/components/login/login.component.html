@@ -1,7 +1,9 @@
-<section class="text-center mt-4">
+<div class="body_login_register">
+
+  @if(isLogging) {
+  <section class="text-center mt-4">
     <h1>Iniciar Sesión</h1>
   </section>
-  
   <section class="d-flex justify-content-center mt-5">
     <form class="w-50" (ngSubmit)="loginWithEmail()">
       <div class="mb-3">
@@ -15,4 +17,37 @@
       <button type="submit" class="btn btn-primary w-100">Entrar</button>
     </form>
   </section>
-  
+
+  } @else {
+  <!-- This other section is to register an user -->
+  <section class="text-center mt-4">
+    <h1>Registrar</h1>
+  </section>
+
+  <section class="d-flex justify-content-center mt-5">
+    <form class="w-50" (ngSubmit)="loginWithEmail()">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="text" class="form-control" [(ngModel)]="username" name="email" required>
+      </div>
+      <div class="mb-3">
+        <label for="name" class="form-label">Nombre</label>
+        <input type="text" class="form-control" [(ngModel)]="name" name="name" required>
+      </div>
+      <div class="mb-3">
+        <label for="lastname" class="form-label">Apellido</label>
+        <input type="text" class="form-control" [(ngModel)]="lastName" name="lastname" required>
+      </div>
+      <div class="mb-3">
+        <label for="password1" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" [(ngModel)]="passwordRegister" name="password1" required>
+      </div>
+      <div class="mb-3">
+        <label for="password2" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" [(ngModel)]="passwordRegister" name="password2" required>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Entrar</button>
+    </form>
+  </section>
+  }
+</div>

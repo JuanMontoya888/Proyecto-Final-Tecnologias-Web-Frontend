@@ -7,6 +7,7 @@ import {
   sendEmailVerification,
 } from 'firebase/auth';
 import { environment } from '../environments/environment';
+import { BehaviorSubject } from 'rxjs';
 
 
 @Injectable({

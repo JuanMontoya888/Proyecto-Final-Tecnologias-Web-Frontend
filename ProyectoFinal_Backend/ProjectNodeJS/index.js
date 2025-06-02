@@ -1,6 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
 const misRutas = require('./routes/routes');
+const ABC_Users = require('./routes/ABC-Users')
+
 
 //instancia de express
 const app = express();
@@ -20,3 +22,4 @@ app.listen(port, () => {
 });
 
 app.use('/', misRutas);
+app.use('/', ABC_Users);
