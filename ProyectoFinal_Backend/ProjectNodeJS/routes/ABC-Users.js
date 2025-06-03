@@ -12,24 +12,41 @@ router.post('/login', (req, res) => {
     const { uid } = req.body;
     let admins;
 
-    console.log(uid);
 
     // Con 'db' mandamos llamar cualquier elemento de la base de datos
     // estos estan organizados por colecciones, y de ahi por documentos
     db.collection('users').get().then(data => {
-        admins = data.docs.map(doc => doc.data());
+        if (data.empty) {
+            console.log("No hay usuarios en la colección.");
+        } else {
+            admins = [];
+            data.forEach(doc => admins.push(doc.data().data));
+            console.log(admins);
+        }
 
-        // console.log(admins);
 
-        // Asignamos los datos que enviamos ocultos a este tipo de dato
-        const { username, password } = req.body;
         // De los datos obtenidos de la bd buscamos los que coincidan con las credenciales
-        const found = admins.find(u => u.UID === uid) || null;
+        const found = admins.find((u) => u.UID === uid ) || null;
 
-        //     //por ultimo enviamos una respuesta al cliente
+        //por ultimo enviamos una respuesta al cliente
         res.json({ user: found });
     });
 
+});
+
+router.post('/createUser', (req, res) => {
+    //const { UID, authMethod, name, username } = req.body;
+    const data = req.body;
+
+
+    try {
+        db.collection('users').add(data).then((result) => {
+            res.status(200).json({ ok: true, message: 'Was created successfully' });
+        });
+
+    } catch (error) {
+        res.status(500).json({ ok: false, error: error.message });
+    }
 });
 
 module.exports = router;

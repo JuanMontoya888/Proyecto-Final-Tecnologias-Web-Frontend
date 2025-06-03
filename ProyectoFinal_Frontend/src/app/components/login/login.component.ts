@@ -18,12 +18,11 @@ export class LoginComponent {
   username: string = '';
   password: string = '';
   isLogging: boolean = false;
-  email: string = '';
   passwordRegister: string = '';
   name: string = '';
   lastName: string = '';
 
-  constructor(private adminService: AdminService, private router: Router, private authService: AuthenticateService, private receiveData: HotelService) { }
+  constructor(private adminService: AdminService, private router: Router, private usersService: AuthenticateService, private receiveData: HotelService) { }
 
   ngOnInit(): void {
     this.receiveData.data$.subscribe(data => this.isLogging = data);
@@ -38,7 +37,7 @@ export class LoginComponent {
 
     LoaderService.mostrar('Verificando credenciales...');
 
-    this.authService.loginWithEmail(this.username, this.password)
+    this.usersService.loginWithEmail(this.username, this.password)
       .then((uid) => {
 
         localStorage.setItem('adminLogueado', JSON.stringify(this.username));
@@ -58,9 +57,9 @@ export class LoginComponent {
 
   // This function will be used to get values of user, it can be logued with Email and password or another
   // This function to receive userData, this userData will come since firebase
-  getUserDB(uid: string): void {
+  getUserDB(uid: any): void {
 
-    this.adminService.login(uid).subscribe(
+    this.adminService.login(String(uid)).subscribe(
       (res: any) => {
         LoaderService.cerrar();
         console.log(res);
@@ -73,7 +72,7 @@ export class LoginComponent {
           Swal.fire('¡Bienvenido!', `Hola ${admin['name']}`, 'success').then(() => {
             window.location.reload();
           });
-          
+
           this.router.navigate(['/']);
 
         }
@@ -86,7 +85,28 @@ export class LoginComponent {
   }
 
 
-  createRegister(): void {
+  createUser(): void {
+    this.usersService.register(this.username, this.password)
+      .then((result) => {
 
+        const dataSend = {
+          UID: result['uid'],
+          authMethod: 'mail',
+          isAvailable: true,
+          name: this.name,
+          username: String(this.name).replace(' ', '_') + String(result['uid']).slice(0, 2)
+        };
+        console.log(dataSend);
+        this.adminService.createUser(dataSend).subscribe((res_api) => {
+          Swal.fire(`Bienvenido ${this.name}`);
+        });
+        this.getUserDB(dataSend.UID);
+        
+        localStorage.setItem('adminLogueado', JSON.stringify(this.username));
+        this.router.navigate(['/']);
+
+      }).catch((error) => {
+        Swal.fire('Error', `${error.message}`, 'error');
+      });
   }
 }

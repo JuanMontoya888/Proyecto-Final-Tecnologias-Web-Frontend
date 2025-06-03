@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, resource } from '@angular/core';
 import { initializeApp } from 'firebase/app';
 import {
   getAuth,
@@ -7,7 +7,6 @@ import {
   sendEmailVerification,
 } from 'firebase/auth';
 import { environment } from '../environments/environment';
-import { BehaviorSubject } from 'rxjs';
 
 
 @Injectable({
@@ -15,32 +14,29 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class AuthenticateService {
   private app = initializeApp(environment.firebase);
-  private auth = getAuth(this.app);
+  private auth !: any;
 
-  constructor() { }
+  constructor() {
+    this.auth = getAuth(this.app);
+  }
 
   loginWithEmail(email: string, password: string): Promise<any> {
     return signInWithEmailAndPassword(this.auth, email, password)
       .then(result => {
         const { uid } = result.user;
-        //console.log(result);
-        // if(!result.user.emailVerified) {
-        //   sendEmailVerification(result.user);
-        //   this.logout();
 
-        //   throw new Error('auth/email-not-verified');
-        // }
-
-        // This data will be send to components
         return uid;
       });
   }
 
-  register(email: string, password: string): Promise<void> {
+  register(email: string, password: string): Promise<any> {
     return createUserWithEmailAndPassword(this.auth, email, password)
-      .then(result => {
-
+      .then((userCredential) => {
+        return userCredential.user;
       })
+      .catch((error) => {
+        throw error;
+      });
   }
 
   logout(): void {

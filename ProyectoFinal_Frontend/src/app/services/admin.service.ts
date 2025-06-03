@@ -9,15 +9,20 @@ export class AdminService {
 
   private adminSubject = new BehaviorSubject<any>(this.getAdminLogueado());
   admin$ = this.adminSubject.asObservable();
-
+  private urapi = 'http://localhost:3000'; 
   constructor(public http: HttpClient) { }
 
   // Retornaremos un observable, para que lo espera hasta que se complete
   login(uid: string): Observable<any> {
-    const urapi = 'http://localhost:3000/login';
     const body = { uid };
+    console.log(this.urapi + '/login', body);
+    return this.http.post(this.urapi + '/login', body);
+  }
 
-    return this.http.post(urapi, body);
+  createUser(data: any): Observable<any> {
+    const body = { data };
+
+    return this.http.post(this.urapi + '/createUser', body);
   }
 
   logout() {
