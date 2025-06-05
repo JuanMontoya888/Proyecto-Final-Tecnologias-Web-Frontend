@@ -1,0 +1,48 @@
+.accesibilidad {
+  position: relative;
+}
+
+.icono-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+/* Menú desplegable */
+.menu-accesibilidad {
+  position: absolute;
+  top: 48px; /* ajusta según ubicación del botón */
+  right: 0;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  padding: 0.75rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 180px;
+}
+
+/* Botones del menú */
+.menu-accesibilidad button {
+  background: #f8f9fa;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  text-align: left;
+  transition: background 0.2s ease;
+}
+
+.menu-accesibilidad button:hover {
+  background: #e2e6ea;
+}.icono-btn {
+  color: var(--blanco) ;
+}
+
+.icono-btn:hover {
+  color: var(--amarillooscuro);
+}
+

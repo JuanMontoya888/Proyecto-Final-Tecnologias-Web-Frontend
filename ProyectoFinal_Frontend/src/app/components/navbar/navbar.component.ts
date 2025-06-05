@@ -5,10 +5,11 @@ import Swal from 'sweetalert2';
 import { AuthenticateService } from '../../services/authenticate.service';
 import { NgClass } from '@angular/common';
 import { HotelService } from '../../services/hotel.service';
+import { AccesibilidadComponent } from '../accesibilidad/accesibilidad.component';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterModule, NgClass],
+  imports: [RouterModule, NgClass, AccesibilidadComponent],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
