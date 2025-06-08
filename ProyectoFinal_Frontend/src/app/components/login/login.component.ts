@@ -71,7 +71,6 @@ export class LoginComponent {
     this.usersService.loginWithEmail(String(this.loginForm.get('email')?.value), String(this.loginForm.get('password')?.value))
       .then((uid) => {
 
-        localStorage.setItem('adminLogueado', JSON.stringify(this.loginForm.get('email')?.value));
         this.router.navigate(['/']);
         // This data came since service and it'll be used to find user name in data base for firebase 
         this.getUserDB(uid);
@@ -116,7 +115,7 @@ export class LoginComponent {
 
 
   createUser(): void {
-    this.usersService.register(String(this.loginForm.get('email')?.value), String(this.loginForm.get('password')?.value))
+    this.usersService.register(String(this.registerForm.get('email')?.value), String(this.registerForm.get('password')?.value))
       .then((result) => {
 
         const dataSend = {
@@ -124,7 +123,8 @@ export class LoginComponent {
           authMethod: 'mail',
           isAvailable: true,
           name: this.registerForm.get('name')?.value,
-          username: String(this.registerForm.get('name')?.value).replace(' ', '_') + String(result['uid']).slice(0, 2)
+          username: String(this.registerForm.get('name')?.value).replace(' ', '_') + String(result['uid']).slice(0, 2),
+          password: this.registerForm.get('password')?.value
         };
         console.log(dataSend);
         this.adminService.createUser(dataSend).subscribe((res_api) => {
@@ -132,7 +132,6 @@ export class LoginComponent {
           this.getUserDB(dataSend.UID);
         });
 
-        localStorage.setItem('adminLogueado', JSON.stringify(this.loginForm.get('email')?.value));
         this.router.navigate(['/']);
 
       }).catch((error) => {

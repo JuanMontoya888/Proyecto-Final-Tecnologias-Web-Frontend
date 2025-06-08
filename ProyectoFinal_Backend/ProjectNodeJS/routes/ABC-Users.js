@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const cors = require('cors');
 const admin = require('../firebase');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 //Inicializar y obtener referencia al servicio de authentication de firebase
 const db = admin.firestore();
@@ -36,17 +38,27 @@ router.post('/login', (req, res) => {
 
 router.post('/createUser', (req, res) => {
     //const { UID, authMethod, name, username } = req.body;
-    const data = req.body;
+    let data = req.body;
 
 
-    try {
+    bcrypt.hash(data.data.password, saltRounds, (err, hash) => {
+        if (err) console.log(err);
+
+        data.data.password = hash;
+
+        console.log(data);
+
         db.collection('users').add(data).then((result) => {
             res.status(200).json({ ok: true, message: 'Was created successfully' });
-        });
+        })
+            .catch((err) => {
+                res.status(500).json({ ok: false, message: err.message });
+            });
 
-    } catch (error) {
-        res.status(500).json({ ok: false, error: error.message });
-    }
+    });
+
+
+
 });
 
 module.exports = router;
