@@ -22,14 +22,14 @@ router.post('/login', (req, res) => {
             admins = [];
             data.forEach(doc => admins.push(doc.data().data));
             console.log(admins);
+
+            // De los datos obtenidos de la bd buscamos los que coincidan con las credenciales
+            const found = admins.find((u) => u.UID === uid) || null;
+
+            //por ultimo enviamos una respuesta al cliente
+            res.json({ user: found });
         }
 
-
-        // De los datos obtenidos de la bd buscamos los que coincidan con las credenciales
-        const found = admins.find((u) => u.UID === uid ) || null;
-
-        //por ultimo enviamos una respuesta al cliente
-        res.json({ user: found });
     });
 
 });
