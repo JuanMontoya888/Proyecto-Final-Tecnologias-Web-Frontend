@@ -9,6 +9,7 @@ import { AuthenticateService } from '../../services/authenticate.service';
 import { HotelService } from '../../services/hotel.service';
 import { CommonModule } from '@angular/common';
 import { NgxCaptchaModule } from 'ngx-captcha';
+import { response } from 'express';
 @Component({
   selector: 'app-login',
   imports: [RouterModule, FormsModule, ReactiveFormsModule, CommonModule, NgxCaptchaModule],
@@ -23,7 +24,6 @@ export class LoginComponent {
   // Formularios reactivos para login y registro
   registerForm!: FormGroup;
   loginForm!: FormGroup;
-
   siteKey: string = '6LfmU1wrAAAAAC5FKiiqp9c0ZKHZDT9VPo8JOwoc';
 
   constructor(
@@ -72,14 +72,74 @@ export class LoginComponent {
 
     LoaderService.mostrar('Verificando credenciales...');
 
-    this.usersService.loginWithEmail(String(this.loginForm.get('email')?.value), String(this.loginForm.get('password')?.value))
-      .then((uid) => {
+    this.adminService.loginWithEmail(String(this.loginForm.get('email')?.value), String(this.loginForm.get('password')?.value))
+      .subscribe((res) => {
+        const { ok } = res;
+
+        if (ok) {
+          this.usersService.loginWithEmail(String(this.loginForm.get('email')?.value), String(this.loginForm.get('password')?.value))
+            .then((resp) => {
+              this.getUserDB(resp);
+            })
+            .catch((error) => {
+              if (error.code === 'auth/email-not-verified') {
+                Swal.fire('Error', 'Tu correo no ha sido confirmado', 'error');
+              } else if (error.code === 'auth/email-already-in-use') {
+                Swal.fire('Error', 'Este correo ya se encuentra registrado', 'error');
+              } else {
+                Swal.fire('Error', error.message, 'error');
+              }
+            });
+        } else {
+          const { message } = res;
+          LoaderService.cerrar();
+
+          if (message === 'incorrect-password') Swal.fire('Error', 'Contraseña incorrecta', 'error');
+          else if (message === 'account-blocked') {
+            Swal.fire('Error', 'Tu cuenta ha sido blockeada', 'error');
+          }
+          else Swal.fire('Error', 'Correo incorrecto', 'error');
+          
+        }
+      }, (err) => {
+        LoaderService.cerrar();
+        Swal.fire('Error', 'No se pudo conectar con el servidor', 'error');
+      });
+
+
+  }
+
+  createUser(): void {
+    this.usersService.register(String(this.registerForm.get('email')?.value), String(this.registerForm.get('password')?.value))
+      .then((result) => {
+
+        // Convierte el nombre en formato correcto
+        const fullName =
+          String(this.registerForm.get('name')?.value).split(' ').map(el => el.charAt(0).toUpperCase() + el.slice(1).toLowerCase()).join(' ') + ' ' +
+          String(this.registerForm.get('lastName')?.value).split(' ').map(el => el.charAt(0).toUpperCase() + el.slice(1).toLowerCase()).join(' ');
+
+        const userName = fullName.split(' ').slice(0, 2).join('_') + '_' + String(result['uid']).slice(0, 2);
+
+
+        const dataSend = {
+          UID: result['uid'],
+          authMethod: 'mail',
+          isAvailable: true,
+          attempts: 0,
+          name: fullName,
+          username: userName,
+          email: this.registerForm.get('email')?.value,
+          password: this.registerForm.get('password')?.value
+        };
+
+        this.adminService.createUser(dataSend).subscribe((res_api) => {
+          Swal.fire(`Bienvenido ${this.registerForm.get('name')?.value}`);
+          this.getUserDB(dataSend.UID);
+        });
 
         this.router.navigate(['/']);
-        // This data came since service and it'll be used to find user name in data base for firebase 
-        this.getUserDB(uid);
-      })
-      .catch((error) => {
+
+      }).catch((error) => {
         if (error.code === 'auth/email-not-verified') {
           Swal.fire('Error', 'Tu correo no ha sido confirmado', 'error');
         } else if (error.code === 'auth/email-already-in-use') {
@@ -87,15 +147,14 @@ export class LoginComponent {
         } else {
           Swal.fire('Error', error.message, 'error');
         }
-
-
       });
   }
+
 
   // This function will be used to get values of user, it can be logued with Email and password or another
   // This function to receive userData, this userData will come since firebase
   getUserDB(uid: any): void {
-    this.adminService.login(String(uid)).subscribe(
+    this.adminService.getUser(String(uid)).subscribe(
       (res: any) => {
         LoaderService.cerrar();
         console.log(res);
@@ -110,7 +169,6 @@ export class LoginComponent {
           });
 
           this.router.navigate(['/']);
-
         }
       },
       (error) => {
@@ -120,29 +178,4 @@ export class LoginComponent {
     );
   }
 
-
-  createUser(): void {
-    this.usersService.register(String(this.registerForm.get('email')?.value), String(this.registerForm.get('password')?.value))
-      .then((result) => {
-
-        const dataSend = {
-          UID: result['uid'],
-          authMethod: 'mail',
-          isAvailable: true,
-          name: this.registerForm.get('name')?.value + ' ' + this.registerForm.get('lastName')?.value,
-          username: String(this.registerForm.get('name')?.value).replace(' ', '_') + String(result['uid']).slice(0, 2),
-          password: this.registerForm.get('password')?.value
-        };
-        console.log(dataSend);
-        this.adminService.createUser(dataSend).subscribe((res_api) => {
-          Swal.fire(`Bienvenido ${this.registerForm.get('name')?.value}`);
-          this.getUserDB(dataSend.UID);
-        });
-
-        this.router.navigate(['/']);
-
-      }).catch((error) => {
-        Swal.fire('Error', `${error.message}`, 'error');
-      });
-  }
 }
