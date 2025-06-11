@@ -8,10 +8,10 @@ import Swal from 'sweetalert2';
 import { AuthenticateService } from '../../services/authenticate.service';
 import { HotelService } from '../../services/hotel.service';
 import { CommonModule } from '@angular/common';
-
+import { NgxCaptchaModule } from 'ngx-captcha';
 @Component({
   selector: 'app-login',
-  imports: [RouterModule, FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [RouterModule, FormsModule, ReactiveFormsModule, CommonModule, NgxCaptchaModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -23,6 +23,8 @@ export class LoginComponent {
   // Formularios reactivos para login y registro
   registerForm!: FormGroup;
   loginForm!: FormGroup;
+
+  siteKey: string = '6LfmU1wrAAAAAC5FKiiqp9c0ZKHZDT9VPo8JOwoc';
 
   constructor(
     private adminService: AdminService,
@@ -47,14 +49,16 @@ export class LoginComponent {
       lastName: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]],
       passwordRepeated: ['', [Validators.required, Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]],
-    }, { Validators: this.passwordValidator() });
+      recaptcha: ['', Validators.required]
+    }, { validator: this.passwordValidator() });
   }
 
   // Validador de contraseña para nuestro registro con email
   public passwordValidator(): any {
     return (group: FormGroup) => {
       const password = group.get('password')?.value;
-      const repeated = group.get('passwordRepeted')?.value;
+      const repeated = group.get('passwordRepeated')?.value;
+      console.log(password, repeated)
       return password === repeated ? null : { passwordMismatch: true }; //si es igual regresa un null, en caso de que no regresa un objeto con un true
     };
   }
@@ -76,11 +80,14 @@ export class LoginComponent {
         this.getUserDB(uid);
       })
       .catch((error) => {
-        if (error.message === 'auth/email-not-verified') {
+        if (error.code === 'auth/email-not-verified') {
           Swal.fire('Error', 'Tu correo no ha sido confirmado', 'error');
+        } else if (error.code === 'auth/email-already-in-use') {
+          Swal.fire('Error', 'Este correo ya se encuentra registrado', 'error');
         } else {
-          Swal.fire('Error', `${error.message}`, 'error');
+          Swal.fire('Error', error.message, 'error');
         }
+
 
       });
   }
@@ -122,7 +129,7 @@ export class LoginComponent {
           UID: result['uid'],
           authMethod: 'mail',
           isAvailable: true,
-          name: this.registerForm.get('name')?.value,
+          name: this.registerForm.get('name')?.value + ' ' + this.registerForm.get('lastName')?.value,
           username: String(this.registerForm.get('name')?.value).replace(' ', '_') + String(result['uid']).slice(0, 2),
           password: this.registerForm.get('password')?.value
         };

@@ -37,13 +37,13 @@
           type="text" class="form-control" formControlName="email" name="email">
       </div>
       <div class="mb-3">
-        <label for="name" class="form-label">Nombre</label>
+        <label for="name" class="form-label">Nombre(s)</label>
         <input
           [ngClass]="[registerForm.get('name')?.touched && registerForm.get('name')?.invalid ? 'form-error border-danger' : '']"
           type="text" class="form-control" formControlName="name" name="name">
       </div>
       <div class="mb-3">
-        <label for="lastName" class="form-label">Apellido</label>
+        <label for="lastName" class="form-label">Apellidos</label>
         <input
           [ngClass]="[registerForm.get('lastName')?.touched && registerForm.get('lastName')?.invalid ? 'form-error border-danger' : '']"
           type="text" class="form-control" formControlName="lastName" name="lastName">
@@ -55,33 +55,38 @@
           type="password" class="form-control" formControlName="password" name="password1">
       </div>
       <div class="mb-3">
-        <label for="password2" class="form-label">Contraseña</label>
+        <label for="password2" class="form-label">Repetir Contraseña</label>
         <input autocomplete="new-password"
           [ngClass]="[registerForm.get('passwordRepeated')?.touched && registerForm.get('passwordRepeated')?.invalid ? 'form-error border-danger' : '']"
           type="password" class="form-control" formControlName="passwordRepeated" name="password2">
       </div>
 
+      <div class="mb-3 d-flex justify-content-center">
+        <ngx-recaptcha2 #captchaElem [siteKey]="siteKey" formControlName="recaptcha">
+        </ngx-recaptcha2>
+      </div>
+
       <div class="text-center text-danger mt-2">
         @if ((registerForm.get('password')?.touched && registerForm.get('password')?.invalid) ||
         (registerForm.get('passwordRepeated')?.touched && registerForm.get('passwordRepeated')?.invalid)) {
-        @if (registerForm.get('password')?.errors?.['required'] ||
-        registerForm.get('passwordRepeated')?.errors?.['required']) {
-        <div><small>Debes ingresar y repetir la contraseña.</small></div>
-        }
 
-        @if (registerForm.get('password')?.errors?.['pattern']) {
-        <div><small>La contraseña debe contener al menos una mayúscula, una minúscula, un número y un símbolo.</small>
-        </div>
-        }
+          @if (registerForm.get('password')?.errors?.['required'] ||
+          registerForm.get('passwordRepeated')?.errors?.['required']) {
+          <div><small>Debes ingresar y repetir la contraseña.</small></div>
+          }
 
-        @if (registerForm.get('password')?.errors?.['minlength']) {
-        <div><small>La contraseña debe tener al menos {{
-            registerForm.get('password')?.errors?.['minlength'].requiredLength }} caracteres.</small></div>
-        }
+          @if (registerForm.get('password')?.errors?.['pattern'] ||
+          registerForm.get('passwordRepeated')?.errors?.['pattern']) {
+          <div><small>La contraseña debe contener al menos una mayúscula, una minúscula, un número y un símbolo.</small>
+          </div>
+          }
 
-        @if (registerForm.get('passwordRepeated')?.errors?.['pattern']) {
-        <div><small>La confirmación de la contraseña también debe cumplir con el formato requerido.</small></div>
-        }
+          @if (registerForm.get('password')?.errors?.['minlength'] ||
+          registerForm.get('passwordRepeated')?.errors?.['minlength']) {
+          <div><small>La contraseña debe tener al menos
+              {{ registerForm.get('password')?.errors?.['minlength'].requiredLength }} caracteres.</small></div>
+          }
+
         }
 
         @if (registerForm.errors?.['passwordMismatch'] && registerForm.touched) {
@@ -94,7 +99,7 @@
 
       </div>
 
-      <button type="submit" class="btn btn-primary w-100">Create User</button>
+      <button [disabled]="registerForm.invalid" type="submit" class="btn btn-primary w-100">Create User</button>
     </form>
   </section>
   }
