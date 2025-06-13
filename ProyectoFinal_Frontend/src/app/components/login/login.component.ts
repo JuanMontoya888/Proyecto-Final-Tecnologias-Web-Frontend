@@ -58,7 +58,6 @@ export class LoginComponent {
     return (group: FormGroup) => {
       const password = group.get('password')?.value;
       const repeated = group.get('passwordRepeated')?.value;
-      console.log(password, repeated)
       return password === repeated ? null : { passwordMismatch: true }; //si es igual regresa un null, en caso de que no regresa un objeto con un true
     };
   }
@@ -96,16 +95,74 @@ export class LoginComponent {
 
           if (message === 'incorrect-password') Swal.fire('Error', 'Contraseña incorrecta', 'error');
           else if (message === 'account-blocked') {
-            Swal.fire('Error', 'Tu cuenta ha sido blockeada', 'error');
+            Swal.fire('Error', 'Tu cuenta ha sido bloqueada', 'error');
           }
           else Swal.fire('Error', 'Correo incorrecto', 'error');
-          
+
         }
       }, (err) => {
         LoaderService.cerrar();
         Swal.fire('Error', 'No se pudo conectar con el servidor', 'error');
       });
+  }
 
+  loginWithGoogle(): void {
+    this.usersService.loginWithGoogle()
+      .then((user) => {
+        let us;
+        this.adminService.getUser(String(user.uid)).subscribe((res: any) => {
+          us = res['user'];
+        });
+
+        if (us !== undefined) {
+          // Convierte el nombre en formato correcto
+          const fullName =
+            String(user.displayName)?.split(' ').map(el => el.charAt(0).toUpperCase() + el.slice(1).toLowerCase()).join(' ');
+
+          const userName = fullName.split(' ').slice(0, 2).join('_') + '_' + String(user?.uid).slice(0, 2);
+
+          const dataSend = {
+            UID: user.uid,
+            authMethod: "google",
+            isAvailable: true,
+            attempts: 0,
+            name: fullName,
+            username: userName,
+            email: user.email
+          };
+
+          this.adminService.addUserGoogle(dataSend).subscribe((res_api) => {
+            Swal.fire(`Bienvenido ${user.name}`);
+          });
+        }
+        this.getUserDB(user.uid);
+
+        this.router.navigate(['/']);
+
+      })
+      .catch((error) => {
+        let alertMessage, alertType;
+        switch (error.code) {
+          case 'auth/popup-closed-by-user':
+            alertMessage = 'La ventana de inicio de sesión fue cerrada.';
+            break;
+          case 'auth/popup-blocked':
+            alertMessage = 'Permite las ventanas emergentes para continuar.';
+            break;
+          case 'auth/network-request-failed':
+            alertMessage = 'Verifica tu conexión a internet.';
+            break;
+          case 'auth/account-exists-with-different-credential':
+            alertMessage = 'Ya existe una cuenta con este correo, pero con otro proveedor.';
+            break;
+          default:
+            alertMessage = 'Error desconocido. Intenta más tarde.';
+        }
+
+        Swal.fire('Error', `${alertMessage}`, `error`);
+
+
+      });
 
   }
 
@@ -120,7 +177,6 @@ export class LoginComponent {
 
         const userName = fullName.split(' ').slice(0, 2).join('_') + '_' + String(result['uid']).slice(0, 2);
 
-
         const dataSend = {
           UID: result['uid'],
           authMethod: 'mail',
@@ -133,7 +189,7 @@ export class LoginComponent {
         };
 
         this.adminService.createUser(dataSend).subscribe((res_api) => {
-          Swal.fire(`Bienvenido ${this.registerForm.get('name')?.value}`);
+          Swal.fire(`Bienvenido ${dataSend.name}`);
           this.getUserDB(dataSend.UID);
         });
 

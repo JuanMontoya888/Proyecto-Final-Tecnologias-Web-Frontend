@@ -5,6 +5,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendEmailVerification,
+  GoogleAuthProvider,
+  signInWithPopup
 } from 'firebase/auth';
 import { environment } from '../environments/environment';
 
@@ -14,6 +16,7 @@ import { environment } from '../environments/environment';
 })
 export class AuthenticateService {
   private app = initializeApp(environment.firebase);
+  private provider = new GoogleAuthProvider().setCustomParameters({ prompt: 'select_account' });
   private auth !: any;
 
   constructor() {
@@ -24,9 +27,19 @@ export class AuthenticateService {
     return signInWithEmailAndPassword(this.auth, email, password)
       .then(result => {
         const { uid } = result.user;
-
         return uid;
       });
+  }
+
+  loginWithGoogle(): Promise<any> {
+    return signInWithPopup(this.auth, this.provider)
+      .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential?.accessToken;
+        const user = result.user;
+
+        return user;
+      }).catch((error) => { throw error; });
   }
 
   register(email: string, password: string): Promise<any> {
@@ -39,8 +52,16 @@ export class AuthenticateService {
       });
   }
 
-  logout(): void {
-    this.auth.signOut();
+  logout(): Promise<void> {
+    return this.auth.signOut()
+      .then(() => {
+        console.log('Sesión cerrada');
+      })
+      .catch((error: any) => {
+        console.error('Error al cerrar sesión:', error);
+        throw error;
+      });
   }
+
 
 }
