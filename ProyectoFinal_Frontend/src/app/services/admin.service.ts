@@ -17,8 +17,12 @@ export class AdminService {
     return this.http.post(this.urapi + '/getUser', { uid });
   }
 
-  loginWithEmail(email: any, password: any): Observable<any> {
+  loginWithEmail(email: string, password: string): Observable<any> {
     return this.http.post(this.urapi + '/login_email', { email, password });
+  }
+
+  loginWithPhoneNumber(phoneNumber: string): Observable<any> {
+    return this.http.post(this.urapi + '/login_phoneNumber', { phoneNumber });
   }
 
   createUser(data: any): Observable<any> {

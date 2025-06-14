@@ -4,9 +4,10 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  sendEmailVerification,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  signInWithPhoneNumber,
+  RecaptchaVerifier
 } from 'firebase/auth';
 import { environment } from '../environments/environment';
 
@@ -23,6 +24,7 @@ export class AuthenticateService {
     this.auth = getAuth(this.app);
   }
 
+
   loginWithEmail(email: string, password: string): Promise<any> {
     return signInWithEmailAndPassword(this.auth, email, password)
       .then(result => {
@@ -30,6 +32,11 @@ export class AuthenticateService {
         return uid;
       });
   }
+
+  loginWithPhoneNumber(phoneNumber: string, verifier: RecaptchaVerifier): Promise<any> {
+    return signInWithPhoneNumber(this.auth, phoneNumber, verifier);
+  }
+
 
   loginWithGoogle(): Promise<any> {
     return signInWithPopup(this.auth, this.provider)
@@ -61,6 +68,10 @@ export class AuthenticateService {
         console.error('Error al cerrar sesión:', error);
         throw error;
       });
+  }
+
+  getAuth(): any {
+    return this.auth;
   }
 
 

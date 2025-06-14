@@ -46,8 +46,8 @@
           </li>
         } @else {
           <li class="nav-item" style="display: flex;">
-            <a class="nav-link btn login-register-btn" (click)="changeStatus(true)" routerLink="/login" [ngClass]="[isLogging ? 'selected-btn' : '']">Login</a>
-            <a class="nav-link btn login-register-btn" (click)="changeStatus(false)" routerLink="/login" [ngClass]="[!isLogging ? 'selected-btn' : '']">Register</a>
+            <a class="nav-link btn login-register-btn" routerLink="/login">Login</a>
+            <a class="nav-link btn login-register-btn" routerLink="/register">Register</a>
           </li>
 
         }

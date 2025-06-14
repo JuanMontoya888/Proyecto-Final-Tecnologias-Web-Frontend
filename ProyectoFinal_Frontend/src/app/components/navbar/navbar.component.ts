@@ -17,7 +17,12 @@ export class NavbarComponent {
   adminLogueado: any = null;
   isLogging: boolean = true;
 
-  constructor(private adminService: AdminService, private router: Router, private authService: AuthenticateService, private sendFlag: HotelService) {}
+  constructor(
+    private adminService: AdminService,
+    private router: Router,
+    private authService: AuthenticateService,
+    private sendFlag: HotelService
+  ) { }
 
   ngOnInit(): void {
     this.adminService.admin$.subscribe(admin => {
@@ -25,11 +30,6 @@ export class NavbarComponent {
     });
   }
 
-  changeStatus(flag: boolean): void {
-    this.isLogging = flag;
-
-    this.sendFlag.sendData(this.isLogging);
-  }
 
   logout() {
     Swal.fire({

@@ -7,6 +7,7 @@ import { ContactoComponent } from './components/contacto/contacto.component';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 import { HotelesComponent } from './components/hoteles/hoteles.component';
 import { AyudaComponent } from './components/ayuda/ayuda.component';
+import { RegisterComponent } from './components/register/register.component';
 
 
 
@@ -19,4 +20,5 @@ export const routes: Routes = [
   { path: 'admin', component: AdminPanelComponent },
   { path: 'hoteles', component: HotelesComponent },
   { path: 'ayuda', component: AyudaComponent },
+  { path: 'register', component: RegisterComponent },
 ];
