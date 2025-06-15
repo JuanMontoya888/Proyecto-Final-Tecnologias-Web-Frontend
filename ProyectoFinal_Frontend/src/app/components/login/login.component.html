@@ -14,7 +14,6 @@
       </div>
 
 
-
       @if (isLoggingWithPhone) {
       <div class="mb-3">
         <label for="phoneNumber" class="form-label">Número de Teléfono</label>
@@ -23,7 +22,8 @@
       </div>
 
       <div class="mb-3 d-grid">
-        <button type="button" class="btn btn-secondary" (click)="sendCode()">
+        <button type="button" class="btn btn-secondary"
+          (click)="sendCode(); loginFormPhoneNumber.patchValue({sendCodePressed: true})">
           Enviar código por SMS
         </button>
       </div>
@@ -38,7 +38,8 @@
 
       <!-- Submit -->
       <div class="mb-3 d-grid">
-        <button type="submit" (click)="login()" class="btn btn-primary">Confirmar código e ingresar</button>
+        <button type="submit" (click)="login()" class="btn btn-primary"
+          [disabled]="loginFormPhoneNumber.invalid">Confirmar código e ingresar</button>
       </div>
 
       <hr class="my-4">
@@ -68,7 +69,8 @@
           type="password" class="form-control" formControlName="password" name="password" placeholder="*******">
       </div>
 
-      <button type="submit" (click)="login()" class="btn btn-primary w-100">Entrar</button>
+      <button type="submit" (click)="login()" class="btn btn-primary w-100"
+        [disabled]="loginForm.invalid">Entrar</button>
 
       <div class="d-flex justify-content-center" style="padding: 1rem; grid-gap: 1rem;">
         <div class="svg" (click)="loginWithGoogle()">

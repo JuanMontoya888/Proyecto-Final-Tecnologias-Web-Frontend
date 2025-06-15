@@ -35,12 +35,20 @@ export class AdminService {
 
   logout(): void {
     localStorage.removeItem('adminLogueado');
-    this.adminSubject.next(null); // Notificamos que ya no hay admin logueado
+    localStorage.removeItem('userLogueado');
+    this.adminSubject.next({ isAdmin: false, user: null });
   }
 
   getAdminLogueado(): any {
-    const admin = localStorage.getItem('adminLogueado');
-    return admin ? JSON.parse(admin) : null;
+    try {
+      const admin = localStorage.getItem('adminLogueado');
+      const user = localStorage.getItem('userLogueado');
+
+      if (admin) return { isAdmin: true, user: JSON.parse(admin) };
+      if (user) return { isAdmin: false, user: JSON.parse(user) };
+
+      return null;
+    } catch (error) { return null; }
   }
 
   getServiciosSeleccionados(reservacion: any): string[] {

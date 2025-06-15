@@ -41,7 +41,7 @@ export class LoginComponent {
 
   ngAfterViewInit(): void {
     this.recaptchaVerifier = new RecaptchaVerifier(this.auth, 'recaptcha-container', {
-      size: 'normal',
+      size: 'invisible',
       callback: (response: any) => {
         console.log('reCAPTCHA resuelto:', response);
       }
@@ -56,16 +56,16 @@ export class LoginComponent {
     //Campos del formulario de logueo
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
 
     this.loginFormPhoneNumber = this.formBuilder.group({
       phoneNumber: ['', [Validators.required]],
-      code: ['', [Validators.required, Validators.pattern(/^[0-9]{4,6}$/)]]
+      sendCodePressed: ['', Validators.required],
+      code: ['', [Validators.required, Validators.pattern(/^[0-9]{4,6}$/)]],
     });
 
   }
-
 
   login(): void {
     this.isLoggingWithPhone ? this.loginWithPhoneNumber() : this.loginWithEmail();
@@ -76,11 +76,8 @@ export class LoginComponent {
     this.adminService.loginWithPhoneNumber(String(this.loginFormPhoneNumber.get('phoneNumber')?.value))
       .subscribe((res) => {
         LoaderService.cerrar();
-
         const { ok } = res;
-
-        if (!ok) {
-          console.log(String(this.loginFormPhoneNumber.get('phoneNumber')?.value), this.recaptchaVerifier)
+        if (ok) {
           this.usersService.loginWithPhoneNumber(String(this.loginFormPhoneNumber.get('phoneNumber')?.value), this.recaptchaVerifier)
             .then((result) => {
               this.confirmationResult = result;
@@ -167,7 +164,6 @@ export class LoginComponent {
           // Convierte el nombre en formato correcto
           const fullName =
             String(user.displayName)?.split(' ').map(el => el.charAt(0).toUpperCase() + el.slice(1).toLowerCase()).join(' ');
-
           const userName = fullName.split(' ').slice(0, 2).join('_') + '_' + String(user?.uid).slice(0, 2);
 
           const dataSend = {
@@ -223,18 +219,20 @@ export class LoginComponent {
       (res: any) => {
         LoaderService.cerrar();
         console.log(res);
-        const admin = res['user'];
+        const user = res['user'];
 
-        if (admin) {
-          localStorage.setItem('adminLogueado', JSON.stringify(admin));
-
-          LoaderService.cerrar();
-          Swal.fire('¡Bienvenido!', `Hola ${admin['name']}`, 'success').then(() => {
-            window.location.reload();
-          });
-
-          this.router.navigate(['/']);
+        if (user['isAdmin']) {
+          localStorage.setItem('adminLogueado', JSON.stringify(user));
+        } else {
+          localStorage.setItem('userLogueado', JSON.stringify(user));
         }
+
+        LoaderService.cerrar();
+        Swal.fire('¡Bienvenido!', `Hola ${user['name']}`, 'success').then(() => {
+          window.location.reload();
+        });
+  
+        this.router.navigate(['/']);
       },
       (error) => {
         LoaderService.cerrar();

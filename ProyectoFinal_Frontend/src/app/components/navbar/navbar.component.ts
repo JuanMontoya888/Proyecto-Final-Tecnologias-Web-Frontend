@@ -6,6 +6,7 @@ import { AuthenticateService } from '../../services/authenticate.service';
 import { NgClass } from '@angular/common';
 import { HotelService } from '../../services/hotel.service';
 import { AccesibilidadComponent } from '../accesibilidad/accesibilidad.component';
+import { text } from 'express';
 
 @Component({
   selector: 'app-navbar',
@@ -14,6 +15,7 @@ import { AccesibilidadComponent } from '../accesibilidad/accesibilidad.component
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
+  userLogueado: any = null;
   adminLogueado: any = null;
   isLogging: boolean = true;
 
@@ -25,8 +27,11 @@ export class NavbarComponent {
   ) { }
 
   ngOnInit(): void {
-    this.adminService.admin$.subscribe(admin => {
-      this.adminLogueado = admin;
+    this.adminService.admin$.subscribe((data: any) => {
+      if (!data) return;
+
+      data.isAdmin ?
+        this.adminLogueado = data.user : this.userLogueado = data.user;
     });
   }
 
