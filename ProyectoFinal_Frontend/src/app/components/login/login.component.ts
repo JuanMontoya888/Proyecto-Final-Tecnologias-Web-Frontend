@@ -3,13 +3,15 @@ import { Router, RouterModule } from '@angular/router';
 import { AdminService } from '../../services/admin.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoaderService } from '../../services/loader.service';
+import { initializeApp } from 'firebase/app';
+import { getAuth, RecaptchaVerifier } from 'firebase/auth';
 
 import Swal from 'sweetalert2';
 import { AuthenticateService } from '../../services/authenticate.service';
-import { HotelService } from '../../services/hotel.service';
 import { CommonModule } from '@angular/common';
 import { NgxCaptchaModule } from 'ngx-captcha';
-import { response } from 'express';
+import { environment } from '../../environments/environment';
+
 @Component({
   selector: 'app-login',
   imports: [RouterModule, FormsModule, ReactiveFormsModule, CommonModule, NgxCaptchaModule],
@@ -17,51 +19,94 @@ import { response } from 'express';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  // isLogging es usada para verificar que formulario esta siendo seleccionado, el recurso llega desde un observable
-  // el cual esta esta enlazado desde otro componente
-  isLogging: boolean = false;
-
   // Formularios reactivos para login y registro
-  registerForm!: FormGroup;
   loginForm!: FormGroup;
-  siteKey: string = '6LfmU1wrAAAAAC5FKiiqp9c0ZKHZDT9VPo8JOwoc';
+  loginFormPhoneNumber!: FormGroup;
+
+  recaptchaVerifier!: RecaptchaVerifier;
+  isLoggingWithPhone: boolean = false;
+  confirmationResult!: import("firebase/auth").ConfirmationResult;
+  auth!: any;
+  containerId!: any;
+
 
   constructor(
     private adminService: AdminService,
     private router: Router,
     private usersService: AuthenticateService,
-    private receiveData: HotelService,
     private formBuilder: FormBuilder
-  ) { }
+  ) {
+    this.auth = this.usersService.getAuth();
+  }
+
+  ngAfterViewInit(): void {
+    this.recaptchaVerifier = new RecaptchaVerifier(this.auth, 'recaptcha-container', {
+      size: 'invisible',
+      callback: (response: any) => {
+        console.log('reCAPTCHA resuelto:', response);
+      }
+    });
+
+    this.recaptchaVerifier.render().then(widgetId => {
+      console.log('reCAPTCHA renderizado con ID:', widgetId);
+    });
+  }
 
   ngOnInit(): void {
-    this.receiveData.data$.subscribe(data => this.isLogging = data);
     //Campos del formulario de logueo
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
 
-    //Campos del formulario de registro
-    this.registerForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      name: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      password: ['', [Validators.required, Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]],
-      passwordRepeated: ['', [Validators.required, Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]],
-      recaptcha: ['', Validators.required]
-    }, { validator: this.passwordValidator() });
+    this.loginFormPhoneNumber = this.formBuilder.group({
+      phoneNumber: ['', [Validators.required]],
+      sendCodePressed: ['', Validators.required],
+      code: ['', [Validators.required, Validators.pattern(/^[0-9]{4,6}$/)]],
+    });
+
   }
 
-  // Validador de contraseña para nuestro registro con email
-  public passwordValidator(): any {
-    return (group: FormGroup) => {
-      const password = group.get('password')?.value;
-      const repeated = group.get('passwordRepeated')?.value;
-      console.log(password, repeated)
-      return password === repeated ? null : { passwordMismatch: true }; //si es igual regresa un null, en caso de que no regresa un objeto con un true
-    };
+  login(): void {
+    this.isLoggingWithPhone ? this.loginWithPhoneNumber() : this.loginWithEmail();
   }
+
+  sendCode(): void {
+    LoaderService.mostrar('Verificando ...');
+    this.adminService.loginWithPhoneNumber(String(this.loginFormPhoneNumber.get('phoneNumber')?.value))
+      .subscribe((res) => {
+        LoaderService.cerrar();
+        const { ok } = res;
+        if (ok) {
+          this.usersService.loginWithPhoneNumber(String(this.loginFormPhoneNumber.get('phoneNumber')?.value), this.recaptchaVerifier)
+            .then((result) => {
+              this.confirmationResult = result;
+              Swal.fire('Código enviado', 'Revisa tu teléfono', 'success');
+            })
+            .catch((err) => {
+              console.error('Error al enviar código:', err);
+              Swal.fire('Error', 'No se pudo enviar el código', 'error');
+            });
+        }
+      }, (err) => {
+        LoaderService.cerrar();
+        Swal.fire('Error', 'No se pudo conectar con el servidor', 'error');
+      });
+  }
+
+  loginWithPhoneNumber(): void {
+    this.confirmationResult.confirm(this.loginFormPhoneNumber.get('code')?.value)
+      .then((result) => {
+        const user = result.user;
+        this.getUserDB(user.uid);
+      })
+      .catch((error) => {
+        console.error('Código incorrecto:', error);
+        Swal.fire('Error', 'El código ingresado no es válido', 'error');
+      });
+
+  }
+
 
   //Logueo por email
   loginWithEmail(): void {
@@ -96,58 +141,74 @@ export class LoginComponent {
 
           if (message === 'incorrect-password') Swal.fire('Error', 'Contraseña incorrecta', 'error');
           else if (message === 'account-blocked') {
-            Swal.fire('Error', 'Tu cuenta ha sido blockeada', 'error');
+            Swal.fire('Error', 'Tu cuenta ha sido bloqueada', 'error');
           }
           else Swal.fire('Error', 'Correo incorrecto', 'error');
-          
+
         }
       }, (err) => {
         LoaderService.cerrar();
         Swal.fire('Error', 'No se pudo conectar con el servidor', 'error');
       });
-
-
   }
 
-  createUser(): void {
-    this.usersService.register(String(this.registerForm.get('email')?.value), String(this.registerForm.get('password')?.value))
-      .then((result) => {
-
-        // Convierte el nombre en formato correcto
-        const fullName =
-          String(this.registerForm.get('name')?.value).split(' ').map(el => el.charAt(0).toUpperCase() + el.slice(1).toLowerCase()).join(' ') + ' ' +
-          String(this.registerForm.get('lastName')?.value).split(' ').map(el => el.charAt(0).toUpperCase() + el.slice(1).toLowerCase()).join(' ');
-
-        const userName = fullName.split(' ').slice(0, 2).join('_') + '_' + String(result['uid']).slice(0, 2);
-
-
-        const dataSend = {
-          UID: result['uid'],
-          authMethod: 'mail',
-          isAvailable: true,
-          attempts: 0,
-          name: fullName,
-          username: userName,
-          email: this.registerForm.get('email')?.value,
-          password: this.registerForm.get('password')?.value
-        };
-
-        this.adminService.createUser(dataSend).subscribe((res_api) => {
-          Swal.fire(`Bienvenido ${this.registerForm.get('name')?.value}`);
-          this.getUserDB(dataSend.UID);
+  loginWithGoogle(): void {
+    this.usersService.loginWithGoogle()
+      .then((user) => {
+        let us;
+        this.adminService.getUser(String(user.uid)).subscribe((res: any) => {
+          us = res['user'];
         });
+
+        if (us !== undefined) {
+          // Convierte el nombre en formato correcto
+          const fullName =
+            String(user.displayName)?.split(' ').map(el => el.charAt(0).toUpperCase() + el.slice(1).toLowerCase()).join(' ');
+          const userName = fullName.split(' ').slice(0, 2).join('_') + '_' + String(user?.uid).slice(0, 2);
+
+          const dataSend = {
+            UID: user.uid,
+            authMethod: "google",
+            isAvailable: true,
+            attempts: 0,
+            name: fullName,
+            username: userName,
+            email: user.email
+          };
+
+          this.adminService.addUserGoogle(dataSend).subscribe((res_api) => {
+            Swal.fire(`Bienvenido ${user.name}`);
+          });
+        }
+        this.getUserDB(user.uid);
 
         this.router.navigate(['/']);
 
-      }).catch((error) => {
-        if (error.code === 'auth/email-not-verified') {
-          Swal.fire('Error', 'Tu correo no ha sido confirmado', 'error');
-        } else if (error.code === 'auth/email-already-in-use') {
-          Swal.fire('Error', 'Este correo ya se encuentra registrado', 'error');
-        } else {
-          Swal.fire('Error', error.message, 'error');
+      })
+      .catch((error) => {
+        let alertMessage, alertType;
+        switch (error.code) {
+          case 'auth/popup-closed-by-user':
+            alertMessage = 'La ventana de inicio de sesión fue cerrada.';
+            break;
+          case 'auth/popup-blocked':
+            alertMessage = 'Permite las ventanas emergentes para continuar.';
+            break;
+          case 'auth/network-request-failed':
+            alertMessage = 'Verifica tu conexión a internet.';
+            break;
+          case 'auth/account-exists-with-different-credential':
+            alertMessage = 'Ya existe una cuenta con este correo, pero con otro proveedor.';
+            break;
+          default:
+            alertMessage = 'Error desconocido. Intenta más tarde.';
         }
+
+        Swal.fire('Error', `${alertMessage}`, `error`);
+
+
       });
+
   }
 
 
@@ -158,18 +219,20 @@ export class LoginComponent {
       (res: any) => {
         LoaderService.cerrar();
         console.log(res);
-        const admin = res['user'];
+        const user = res['user'];
 
-        if (admin) {
-          localStorage.setItem('adminLogueado', JSON.stringify(admin));
-
-          LoaderService.cerrar();
-          Swal.fire('¡Bienvenido!', `Hola ${admin['name']}`, 'success').then(() => {
-            window.location.reload();
-          });
-
-          this.router.navigate(['/']);
+        if (user['isAdmin']) {
+          localStorage.setItem('adminLogueado', JSON.stringify(user));
+        } else {
+          localStorage.setItem('userLogueado', JSON.stringify(user));
         }
+
+        LoaderService.cerrar();
+        Swal.fire('¡Bienvenido!', `Hola ${user['name']}`, 'success').then(() => {
+          window.location.reload();
+        });
+  
+        this.router.navigate(['/']);
       },
       (error) => {
         LoaderService.cerrar();

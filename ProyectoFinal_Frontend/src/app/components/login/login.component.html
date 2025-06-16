@@ -1,106 +1,98 @@
 <div class="body_login_register">
-
-  @if(isLogging) {
   <section class="text-center mt-4">
     <h1>Iniciar Sesión</h1>
   </section>
+
   <section class="d-flex justify-content-center mt-5">
-    <form [formGroup]="loginForm" class="w-50" (ngSubmit)="loginWithEmail()">
+    <form [formGroup]="isLoggingWithPhone ? loginFormPhoneNumber : loginForm" class="w-50">
+      <div class="btn-group w-80 d-flex justify-content-center mb-3" role="group" aria-label="Toggle login method">
+        <button type="button" class="btn" [class.btn-primary]="!isLoggingWithPhone"
+          [class.btn-outline-primary]="isLoggingWithPhone" (click)="isLoggingWithPhone = false">Email</button>
+
+        <button type="button" class="btn" [class.btn-primary]="isLoggingWithPhone"
+          [class.btn-outline-primary]="!isLoggingWithPhone" (click)="isLoggingWithPhone = true">Teléfono</button>
+      </div>
+
+
+      @if (isLoggingWithPhone) {
+      <div class="mb-3">
+        <label for="phoneNumber" class="form-label">Número de Teléfono</label>
+        <input type="text" id="phoneNumber" name="phoneNumber" formControlName="phoneNumber" class="form-control"
+          placeholder="+521XXXXXXXXXX">
+      </div>
+
+      <div class="mb-3 d-grid">
+        <button type="button" class="btn btn-secondary"
+          (click)="sendCode(); loginFormPhoneNumber.patchValue({sendCodePressed: true})">
+          Enviar código por SMS
+        </button>
+      </div>
+
+      <!-- Código de verificación -->
+      <div class="mb-3">
+        <label for="code" class="form-label">Código de verificación</label>
+        <input type="text" id="code" name="code" formControlName="code" class="form-control"
+          [ngClass]="{'is-invalid': loginFormPhoneNumber.get('code')?.touched && loginFormPhoneNumber.get('code')?.invalid}"
+          placeholder="123456">
+      </div>
+
+      <!-- Submit -->
+      <div class="mb-3 d-grid">
+        <button type="submit" (click)="login()" class="btn btn-primary"
+          [disabled]="loginFormPhoneNumber.invalid">Confirmar código e ingresar</button>
+      </div>
+
+      <hr class="my-4">
+
+      <!-- Login con Google -->
+      <div class="d-flex justify-content-center gap-3">
+        <div class="svg" (click)="loginWithGoogle()" title="Ingresar con Google" style="cursor: pointer;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+            stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945z" />
+          </svg>
+        </div>
+      </div>
+
+      } @else {
+
       <div class="mb-3">
         <label for="mail" class="form-label">Usuario</label>
         <input
           [ngClass]="[loginForm.get('email')?.touched && loginForm.get('email')?.invalid ? 'form-error border-danger' : '']"
-          type="text" class="form-control" formControlName="email" name="email">
+          type="text" class="form-control" formControlName="email" name="email" placeholder="user@gmail.com">
       </div>
       <div class="mb-3">
         <label for="password" class="form-label">Contraseña</label>
         <input
           [ngClass]="[loginForm.get('password')?.touched && loginForm.get('password')?.invalid ? 'form-error border-danger' : '']"
-          type="password" class="form-control" formControlName="password" name="password">
+          type="password" class="form-control" formControlName="password" name="password" placeholder="*******">
       </div>
-      <button type="submit" class="btn btn-primary w-100">Entrar</button>
+
+      <button type="submit" (click)="login()" class="btn btn-primary w-100"
+        [disabled]="loginForm.invalid">Entrar</button>
+
+      <div class="d-flex justify-content-center" style="padding: 1rem; grid-gap: 1rem;">
+        <div class="svg" (click)="loginWithGoogle()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+            stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945z" />
+          </svg>
+        </div>
+
+        <div class="svg">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+            stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3" />
+          </svg>
+        </div>
+
+      </div>
+      }
+
     </form>
   </section>
 
-  } @else {
-  <!-- This other section is to register an user -->
-  <section class="text-center mt-4">
-    <h1>Registrar</h1>
-  </section>
+  <div id="recaptcha-container"></div>
 
-  <section class="d-flex justify-content-center mt-5">
-    <form [formGroup]="registerForm" (ngSubmit)="createUser()" class="w-50">
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input autocomplete="off"
-          [ngClass]="[registerForm.get('email')?.touched && registerForm.get('email')?.invalid ? 'form-error border-danger' : '']"
-          type="text" class="form-control" formControlName="email" name="email">
-      </div>
-      <div class="mb-3">
-        <label for="name" class="form-label">Nombre(s)</label>
-        <input
-          [ngClass]="[registerForm.get('name')?.touched && registerForm.get('name')?.invalid ? 'form-error border-danger' : '']"
-          type="text" class="form-control" formControlName="name" name="name">
-      </div>
-      <div class="mb-3">
-        <label for="lastName" class="form-label">Apellidos</label>
-        <input
-          [ngClass]="[registerForm.get('lastName')?.touched && registerForm.get('lastName')?.invalid ? 'form-error border-danger' : '']"
-          type="text" class="form-control" formControlName="lastName" name="lastName">
-      </div>
-      <div class="mb-3">
-        <label for="password1" class="form-label">Contraseña</label>
-        <input autocomplete="new-password"
-          [ngClass]="[registerForm.get('password')?.touched && registerForm.get('password')?.invalid ? 'form-error border-danger' : '']"
-          type="password" class="form-control" formControlName="password" name="password1">
-      </div>
-      <div class="mb-3">
-        <label for="password2" class="form-label">Repetir Contraseña</label>
-        <input autocomplete="new-password"
-          [ngClass]="[registerForm.get('passwordRepeated')?.touched && registerForm.get('passwordRepeated')?.invalid ? 'form-error border-danger' : '']"
-          type="password" class="form-control" formControlName="passwordRepeated" name="password2">
-      </div>
-
-      <div class="mb-3 d-flex justify-content-center">
-        <ngx-recaptcha2 #captchaElem [siteKey]="siteKey" formControlName="recaptcha">
-        </ngx-recaptcha2>
-      </div>
-
-      <div class="text-center text-danger mt-2">
-        @if ((registerForm.get('password')?.touched && registerForm.get('password')?.invalid) ||
-        (registerForm.get('passwordRepeated')?.touched && registerForm.get('passwordRepeated')?.invalid)) {
-
-          @if (registerForm.get('password')?.errors?.['required'] ||
-          registerForm.get('passwordRepeated')?.errors?.['required']) {
-          <div><small>Debes ingresar y repetir la contraseña.</small></div>
-          }
-
-          @if (registerForm.get('password')?.errors?.['pattern'] ||
-          registerForm.get('passwordRepeated')?.errors?.['pattern']) {
-          <div><small>La contraseña debe contener al menos una mayúscula, una minúscula, un número y un símbolo.</small>
-          </div>
-          }
-
-          @if (registerForm.get('password')?.errors?.['minlength'] ||
-          registerForm.get('passwordRepeated')?.errors?.['minlength']) {
-          <div><small>La contraseña debe tener al menos
-              {{ registerForm.get('password')?.errors?.['minlength'].requiredLength }} caracteres.</small></div>
-          }
-
-        }
-
-        @if (registerForm.errors?.['passwordMismatch'] && registerForm.touched) {
-        <div><small>Las contraseñas no coinciden.</small></div>
-        }
-
-        @if (registerForm.touched && registerForm.invalid) {
-        <div><small>Rellenar campos.</small></div>
-        }
-
-      </div>
-
-      <button [disabled]="registerForm.invalid" type="submit" class="btn btn-primary w-100">Create User</button>
-    </form>
-  </section>
-  }
 </div>

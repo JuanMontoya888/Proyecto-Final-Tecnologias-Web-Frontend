@@ -9,7 +9,7 @@ export class AdminService {
 
   private adminSubject = new BehaviorSubject<any>(this.getAdminLogueado());
   admin$ = this.adminSubject.asObservable();
-  private urapi = 'http://localhost:3000';
+  private urapi = 'http://127.0.0.1:3000';
   constructor(public http: HttpClient) { }
 
   // Retornaremos un observable, para que lo espera hasta que se complete
@@ -17,22 +17,38 @@ export class AdminService {
     return this.http.post(this.urapi + '/getUser', { uid });
   }
 
-  loginWithEmail(email: any, password: any): Observable<any> {
+  loginWithEmail(email: string, password: string): Observable<any> {
     return this.http.post(this.urapi + '/login_email', { email, password });
+  }
+
+  loginWithPhoneNumber(phoneNumber: string): Observable<any> {
+    return this.http.post(this.urapi + '/login_phoneNumber', { phoneNumber });
   }
 
   createUser(data: any): Observable<any> {
     return this.http.post(this.urapi + '/createUser', { data });
   }
 
-  logout() {
-    localStorage.removeItem('adminLogueado');
-    this.adminSubject.next(null); // Notificamos que ya no hay admin logueado
+  addUserGoogle(data: any): Observable<any> {
+    return this.http.post(this.urapi + '/addUserGoogle', { data });
   }
 
-  getAdminLogueado() {
-    const admin = localStorage.getItem('adminLogueado');
-    return admin ? JSON.parse(admin) : null;
+  logout(): void {
+    localStorage.removeItem('adminLogueado');
+    localStorage.removeItem('userLogueado');
+    this.adminSubject.next({ isAdmin: false, user: null });
+  }
+
+  getAdminLogueado(): any {
+    try {
+      const admin = localStorage.getItem('adminLogueado');
+      const user = localStorage.getItem('userLogueado');
+
+      if (admin) return { isAdmin: true, user: JSON.parse(admin) };
+      if (user) return { isAdmin: false, user: JSON.parse(user) };
+
+      return null;
+    } catch (error) { return null; }
   }
 
   getServiciosSeleccionados(reservacion: any): string[] {
