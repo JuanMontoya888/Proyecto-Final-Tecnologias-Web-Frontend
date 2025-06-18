@@ -173,7 +173,7 @@ export class ReservacionComponent implements OnInit {
   enviar() {
     if (this.reservacionForm.valid) {
       Swal.fire({
-        title: '¿Confirmar reservación?',
+        title: '¿Desea confirmar la reservación?',
         text: 'Verifica que los datos sean correctos antes de guardar.',
         icon: 'question',
         showCancelButton: true,
@@ -246,6 +246,36 @@ export class ReservacionComponent implements OnInit {
       });
     } else {
       Swal.fire('Error', 'Por favor completa todos los campos correctamente.', 'error');
+      if (this.reservacionForm.valid) {
+        Swal.fire({
+          title: '¿Confirmar reservación?',
+          text: 'Verifica que los datos sean correctos antes de guardar.',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Sí, reservar',
+          cancelButtonText: 'Cancelar'
+        }).then(result => {
+          if (result.isConfirmed) {
+            const datos = this.reservacionForm.value;
+
+            const nuevaReservacion: Reservacion = {
+              nombre: datos.nombre,
+              tipoHabitacion: datos.tipoHabitacion,
+              serviciosSeleccionados: this.obtenerServiciosSeleccionados(),
+              metodoPago: datos.metodoPago,
+              fechaInicio: datos.fechaInicio.toISOString(), // Convierte fechas a formato ISO
+              fechaFin: datos.fechaFin.toISOString(),
+              hotel: this.hotel.nombre,
+              precioBase: this.precioBase,
+              precioServicios: this.precioServicios,
+              precioTotal: this.precioTotal
+            };
+          }
+        });
+      } else {
+        Swal.fire('Error', 'Por favor completa todos los campos correctamente.', 'error');
+      }
+
     }
   }
 }

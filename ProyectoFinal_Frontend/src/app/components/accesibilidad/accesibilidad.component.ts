@@ -8,8 +8,29 @@ import { Component } from '@angular/core';
   styleUrl: './accesibilidad.component.css'
 })
 export class AccesibilidadComponent {
-   menuAbierto = false;
+  menuAbierto = false;
   lecturaActiva = false;
+
+  textoMenuAbierto = false;
+  escala = 1;
+
+  temaContraste = -1; // -1 sin contraste
+  totalTemas = 3;
+
+  constructor(private renderer: Renderer2) {
+    // Restaurar preferencias
+    const escalaGuardada = localStorage.getItem('escalaTexto');
+    if (escalaGuardada) {
+      this.escala = parseFloat(escalaGuardada);
+      document.body.style.fontSize = `${this.escala}em`;
+    }
+
+    const temaGuardado = localStorage.getItem('temaContraste');
+    if (temaGuardado !== null) {
+      this.temaContraste = parseInt(temaGuardado);
+      this.aplicarTemaContraste();
+    }
+  }
 
   toggleMenu() {
     this.menuAbierto = !this.menuAbierto;
@@ -28,11 +49,41 @@ export class AccesibilidadComponent {
     this.lecturaActiva = false;
   }
 
-  aumentarTexto() {
-    document.body.style.fontSize = '1.2em';
+  toggleTextoMenu() {
+    this.textoMenuAbierto = !this.textoMenuAbierto;
   }
 
-  contrasteAlto() {
-    document.body.classList.toggle('contraste-alto');
-  } 
+  aumentarTexto() {
+    this.escala += 0.1;
+    document.body.style.fontSize = `${this.escala}em`;
+    localStorage.setItem('escalaTexto', String(this.escala));
+    this.textoMenuAbierto = false;
+  }
+
+  disminuirTexto() {
+    this.escala = Math.max(0.6, this.escala - 0.1);
+    document.body.style.fontSize = `${this.escala}em`;
+    localStorage.setItem('escalaTexto', String(this.escala));
+    this.textoMenuAbierto = false;
+  }
+
+  restaurarTexto() {
+    this.escala = 1;
+    document.body.style.fontSize = '1em';
+    localStorage.setItem('escalaTexto', String(this.escala));
+    this.textoMenuAbierto = false;
+  }
+
+  cambiarContraste() {
+    if (this.temaContraste >= 0) {
+      this.renderer.removeClass(document.body, `contraste-tema-${this.temaContraste}`);
+    }
+    this.temaContraste = (this.temaContraste + 1) % this.totalTemas;
+    this.aplicarTemaContraste();
+    localStorage.setItem('temaContraste', String(this.temaContraste));
+  }
+
+  private aplicarTemaContraste() {
+    this.renderer.addClass(document.body, `contraste-tema-${this.temaContraste}`);
+  }
 }
