@@ -78,7 +78,15 @@ export class LoginComponent {
           this.usersService.loginWithPhoneNumber(String(this.loginFormPhoneNumber.get('phoneNumber')?.value), this.recaptchaVerifier)
             .then((result) => {
               this.confirmationResult = result;
-              Swal.fire('Código enviado', 'Revisa tu teléfono', 'success');
+              Swal.fire({
+                title: "Código enviado, revisa tu telefono",
+                showClass: {
+                  popup: `animate__animated animate__fadeInUp animate__faster`
+                },
+                hideClass: {
+                  popup: `animate__animated animate__fadeOutDown animate__faster`
+                }
+              });
             })
             .catch((err) => {
               console.error('Error al enviar código:', err);

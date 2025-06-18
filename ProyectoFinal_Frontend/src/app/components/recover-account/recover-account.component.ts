@@ -48,20 +48,13 @@ export class RecoverAccountComponent {
         if (ok) {
           this.recoverAccount.patchValue({ codeWasSent: true });
           Swal.fire({
-            title: "Código enviado",
+            title: "Código enviado, revisa tu telefono",
             showClass: {
-              popup: `
-                    animate__animated
-                    animate__fadeInUp
-                    animate__faster
-                  `
+              popup: `animate__animated animate__fadeInUp animate__faster`
             },
             hideClass: {
-              popup: `
-                    animate__animated
-                    animate__fadeOutDown
-                    animate__faster
-                  `}
+              popup: `animate__animated animate__fadeOutDown animate__faster`
+            }
           });
         } else {
           Swal.fire({
@@ -93,7 +86,7 @@ export class RecoverAccountComponent {
 
       if (this.numberAttempts === 0) this.router.navigate(['/login']);
     } else {
-      LoaderService.mostrar('Desbloqueando ...');
+      LoaderService.mostrar('Verificando ...');
 
       this.adminService.unlockAccount(this.recoverAccount.get('email')?.value)
         .subscribe((res) => {

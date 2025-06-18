@@ -26,6 +26,7 @@ import { ReservasService } from '../../services/reservas.service';
 
 import Swal from 'sweetalert2';
 import { ValidatorsReserv } from './validators';
+import { AdminService } from '../../services/admin.service';
 
 function nombreCompletoValidator(control: FormControl) {
   const valor = control.value || '';
@@ -87,14 +88,17 @@ export class ReservacionComponent implements OnInit {
   minDate: Date = new Date();
   maxDate: Date = new Date();
   tiposHabitacion: string[] = ['Individual', 'Doble', 'Suite', 'Familiar'];
+  email: string = 'jmaurixiomartinex@gmail.com';
+  user: string = 'Juan Montoya';
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private hotelService: HotelService,
-    private reservas : ReservasService
-  ) {}
+    private reservas: ReservasService,
+    private adminService: AdminService,
+  ) { }
 
   ngOnInit(): void {
     this.minDate.setDate(this.minDate.getDate() + 15);
@@ -125,7 +129,7 @@ export class ReservacionComponent implements OnInit {
     }, {
       validators: ValidatorsReserv.rangoFechaValidator(this.minDate, this.maxDate)
     });
-    
+
 
     this.hotel.servicios.forEach(servicio => {
       const control = new FormControl(false);
@@ -167,50 +171,81 @@ export class ReservacionComponent implements OnInit {
   }
 
   enviar() {
-  if (this.reservacionForm.valid) {
-    Swal.fire({
-      title: '¿Confirmar reservación?',
-      text: 'Verifica que los datos sean correctos antes de guardar.',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, reservar',
-      cancelButtonText: 'Cancelar'
-    }).then(result => {
-      if (result.isConfirmed) {
-        const datos = this.reservacionForm.value;
+    if (this.reservacionForm.valid) {
+      Swal.fire({
+        title: '¿Confirmar reservación?',
+        text: 'Verifica que los datos sean correctos antes de guardar.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, reservar',
+        cancelButtonText: 'Cancelar'
+      }).then(result => {
+        if (result.isConfirmed) {
+          const datos = this.reservacionForm.value;
 
-        const nuevaReservacion: Reservacion = {
-          nombre: datos.nombre,
-          tipoHabitacion: datos.tipoHabitacion,
-          serviciosSeleccionados: this.obtenerServiciosSeleccionados(),
-          metodoPago: datos.metodoPago,
-          fechaInicio: datos.fechaInicio.toISOString(), // Convierte fechas a formato ISO
-          fechaFin: datos.fechaFin.toISOString(),
-          hotel: this.hotel.nombre,
-          precioBase: this.precioBase,
-          precioServicios: this.precioServicios,
-          precioTotal: this.precioTotal
-        };
+          const nuevaReservacion: Reservacion = {
+            nombre: datos.nombre,
+            tipoHabitacion: datos.tipoHabitacion,
+            serviciosSeleccionados: this.obtenerServiciosSeleccionados(),
+            metodoPago: datos.metodoPago,
+            fechaInicio: datos.fechaInicio.toISOString(), // Convierte fechas a formato ISO
+            fechaFin: datos.fechaFin.toISOString(),
+            hotel: this.hotel.nombre,
+            precioBase: this.precioBase,
+            precioServicios: this.precioServicios,
+            precioTotal: this.precioTotal
+          };
 
-        this.reservas.createPost(nuevaReservacion).subscribe({
-          next: (res: any) => {
-            Swal.fire('¡Reservación completada!', 'Gracias por tu preferencia.', 'success').then(() => {
-              this.reservacionForm.reset();
-              this.precioServicios = 0;
-              this.precioBase = 0;
-              this.precioTotal = 0;
-              this.router.navigate(['/hoteles']);
-            });
-          },
-          error: (error) => {
-            console.error('Error al guardar la reservación:', error);
-            Swal.fire('Error', 'No se pudo guardar la reservación. Intenta de nuevo.', 'error');
-          }
-        });
-      }
-    });
-  } else {
-    Swal.fire('Error', 'Por favor completa todos los campos correctamente.', 'error');
+          this.reservas.createPost(nuevaReservacion).subscribe({
+            next: (res: any) => {
+              Swal.fire('¡Reservación completada!', 'Gracias por tu preferencia.', 'success').then(() => {
+                this.reservacionForm.reset();
+                this.precioServicios = 0;
+                this.precioBase = 0;
+                this.precioTotal = 0;
+                this.router.navigate(['/hoteles']);
+              });
+
+              //Hacemos la llamda a la Api con los datos para que envie el correo, solo si es que la reserva fue exitosa
+              this.adminService.sendMail(this.email, nuevaReservacion, this.user)
+                .subscribe((resp) => {
+                  const { ok } = resp;
+
+                  if (ok) {
+                    Swal.fire({
+                      title: "Reservación enviada a tu correo",
+                      showClass: {
+                        popup: `animate__animated animate__fadeInUp animate__faster`
+                      },
+                      hideClass: {
+                        popup: `animate__animated animate__fadeOutDown animate__faster`
+                      }
+                    });
+                  } else {
+                    Swal.fire({
+                      icon: "error",
+                      title: "Error",
+                      text: "Ocurrió algún error, vuelva a intentar",
+                    });
+                  }
+                }, (err) => {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Ocurrió algún error, vuelva a intentar",
+                  });
+                });
+
+            },
+            error: (error) => {
+              console.error('Error al guardar la reservación:', error);
+              Swal.fire('Error', 'No se pudo guardar la reservación. Intenta de nuevo.', 'error');
+            }
+          });
+        }
+      });
+    } else {
+      Swal.fire('Error', 'Por favor completa todos los campos correctamente.', 'error');
+    }
   }
-}
 }
