@@ -8,6 +8,7 @@ import { AdminPanelComponent } from './components/admin-panel/admin-panel.compon
 import { HotelesComponent } from './components/hoteles/hoteles.component';
 import { AyudaComponent } from './components/ayuda/ayuda.component';
 import { RegisterComponent } from './components/register/register.component';
+import { RecoverAccountComponent } from './components/recover-account/recover-account.component';
 
 
 
@@ -21,4 +22,5 @@ export const routes: Routes = [
   { path: 'hoteles', component: HotelesComponent },
   { path: 'ayuda', component: AyudaComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'recoverAccount', component: RecoverAccountComponent },
 ];

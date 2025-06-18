@@ -10,7 +10,7 @@ import { text } from 'express';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterModule, NgClass, AccesibilidadComponent],
+  imports: [RouterModule, AccesibilidadComponent],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
@@ -48,7 +48,9 @@ export class NavbarComponent {
       if (result.isConfirmed) {
         this.adminService.logout();
         this.authService.logout();
+        this.userLogueado = this.adminLogueado = null;
         this.router.navigate(['/login']);
+
       }
     });
   }

@@ -3,14 +3,12 @@ import { Router, RouterModule } from '@angular/router';
 import { AdminService } from '../../services/admin.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoaderService } from '../../services/loader.service';
-import { initializeApp } from 'firebase/app';
-import { getAuth, RecaptchaVerifier } from 'firebase/auth';
+import { RecaptchaVerifier } from 'firebase/auth';
 
 import Swal from 'sweetalert2';
 import { AuthenticateService } from '../../services/authenticate.service';
 import { CommonModule } from '@angular/common';
 import { NgxCaptchaModule } from 'ngx-captcha';
-import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +17,7 @@ import { environment } from '../../environments/environment';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  // Formularios reactivos para login y registro
+  // Reactive forms
   loginForm!: FormGroup;
   loginFormPhoneNumber!: FormGroup;
 
@@ -28,7 +26,6 @@ export class LoginComponent {
   confirmationResult!: import("firebase/auth").ConfirmationResult;
   auth!: any;
   containerId!: any;
-
 
   constructor(
     private adminService: AdminService,
@@ -81,7 +78,15 @@ export class LoginComponent {
           this.usersService.loginWithPhoneNumber(String(this.loginFormPhoneNumber.get('phoneNumber')?.value), this.recaptchaVerifier)
             .then((result) => {
               this.confirmationResult = result;
-              Swal.fire('Código enviado', 'Revisa tu teléfono', 'success');
+              Swal.fire({
+                title: "Código enviado, revisa tu telefono",
+                showClass: {
+                  popup: `animate__animated animate__fadeInUp animate__faster`
+                },
+                hideClass: {
+                  popup: `animate__animated animate__fadeOutDown animate__faster`
+                }
+              });
             })
             .catch((err) => {
               console.error('Error al enviar código:', err);
@@ -140,10 +145,40 @@ export class LoginComponent {
           LoaderService.cerrar();
 
           if (message === 'incorrect-password') Swal.fire('Error', 'Contraseña incorrecta', 'error');
+
           else if (message === 'account-blocked') {
-            Swal.fire('Error', 'Tu cuenta ha sido bloqueada', 'error');
+            Swal.fire({
+              title: "Error",
+              text: "Tu cuenta fue bloqueada!",
+              icon: "error",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Desbloquear cuenta"
+            }).then((result) => {
+              if (result.isConfirmed) {
+                localStorage.setItem('email', JSON.stringify(this.loginForm.get('email')?.value));
+                this.router.navigate(['/recoverAccount']);
+              }
+            });
+
           }
-          else Swal.fire('Error', 'Correo incorrecto', 'error');
+          else if (message === 'not-registered') {
+            Swal.fire({
+              title: "Error",
+              text: "Correo no se encuentra registrado!",
+              icon: "error",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Registrarte"
+            }).then((result) => {
+              if (result.isConfirmed) {
+                localStorage.setItem('emailRegister', JSON.stringify(this.loginForm.get('email')?.value));
+                this.router.navigate(['/register']);
+              }
+            });
+          }
 
         }
       }, (err) => {
@@ -231,7 +266,7 @@ export class LoginComponent {
         Swal.fire('¡Bienvenido!', `Hola ${user['name']}`, 'success').then(() => {
           window.location.reload();
         });
-  
+
         this.router.navigate(['/']);
       },
       (error) => {
