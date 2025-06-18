@@ -72,8 +72,8 @@ export class AdminService {
     return this.http.post(this.urapi + '/getCode', { email });
   }
 
-  unlockAccount(email: string): Observable<any> {
-    return this.http.post(this.urapi + '/unlockAccount', { email });
+  unlockAccount(email: string, newPassword: string): Observable<any> {
+    return this.http.post(this.urapi + '/unlockAccount', { email, newPassword });
   }
 
   sendMail(email: string, reservacion: any, user: string): Observable<any> {

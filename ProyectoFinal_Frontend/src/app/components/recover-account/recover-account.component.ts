@@ -21,7 +21,6 @@ export class RecoverAccountComponent {
   constructor(
     private adminService: AdminService,
     private router: Router,
-    private usersService: AuthenticateService,
     private formBuilder: FormBuilder
   ) { }
 
@@ -32,10 +31,21 @@ export class RecoverAccountComponent {
       email: [`${email}`, [Validators.required, Validators.email]],
       sendCodePressed: ['', Validators.required],
       code: ['', [Validators.required, Validators.pattern(/^[0-9]{4,6}$/)]],
+      newPassword: ['', [Validators.required, Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]],
+      newPasswordRepeated: ['', [Validators.required, Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]],
       codeWasSent: ['', [Validators.required]],
-    });
+    }, { validator: this.passwordValidator() });
 
     localStorage.removeItem('email');
+  }
+
+  // Validador de contraseña para nuestro registro con email
+  public passwordValidator(): any {
+    return (group: FormGroup) => {
+      const password = group.get('newPassword')?.value;
+      const repeated = group.get('newPasswordRepeated')?.value;
+      return password === repeated ? null : { passwordMismatch: true }; //si es igual regresa un null, en caso de que no regresa un objeto con un true
+    };
   }
 
   sendCode(): void {
@@ -90,14 +100,14 @@ export class RecoverAccountComponent {
     } else {
       LoaderService.mostrar('Verificando ...');
 
-      this.adminService.unlockAccount(this.recoverAccount.get('email')?.value)
+      this.adminService.unlockAccount(this.recoverAccount.get('email')?.value, this.recoverAccount.get('newPassword')?.value)
         .subscribe((res) => {
           const { ok } = res;
 
           LoaderService.cerrar();
 
           if (ok) {
-            Swal.fire('Cuenta habilitada!', 'Tu cuenta ha sido habilitada', 'success');
+            Swal.fire('Cuenta habilitada!', 'Tu contraseña ha sido cambiada', 'success');
             this.router.navigate(['/login']);
           } else {
             Swal.fire({

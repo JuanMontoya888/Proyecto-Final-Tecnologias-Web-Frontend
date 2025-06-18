@@ -1,7 +1,7 @@
 <div class="body_login_register">
-    <section class="text-center mt-4">
-        <h1>Recuperar cuenta</h1>
-    </section>
+  <section class="text-center mt-4">
+    <h1>Recuperar cuenta</h1>
+  </section>
 
 
   <section class="d-flex justify-content-center mt-5">
@@ -13,17 +13,70 @@
       </div>
 
       <div class="mb-3 d-grid">
-        <button type="button" class="btn btn-secondary" 
-        (click)="sendCode(); recoverAccount.patchValue({sendCodePressed: true})">Enviar código</button>
+        <button type="button" class="btn btn-secondary"
+          (click)="sendCode(); recoverAccount.patchValue({sendCodePressed: true})">Enviar código</button>
       </div>
 
       <div class="mb-3">
         <label for="code" class="form-label">Código de verificación</label>
-        <input type="number" id="code" name="code" formControlName="code" class="form-control"placeholder="123456">
+        <input type="number" id="code" name="code" formControlName="code" class="form-control" placeholder="123456"
+          [readOnly]="recoverAccount.get('sendCodePressed')?.invalid">
+      </div>
+
+      <div class="mb-3">
+        <label for="password1" class="form-label">Contraseña</label>
+        <input autocomplete="new-password"
+          [ngClass]="[recoverAccount.get('newPassword')?.touched && recoverAccount.get('newPassword')?.invalid ? 'form-error border-danger' : '']"
+          type="password" class="form-control" formControlName="newPassword" name="password1" placeholder="*******"
+          [readOnly]="recoverAccount.get('code')?.invalid">
+      </div>
+
+      <div class="mb-3">
+        <label for="password2" class="form-label">Repetir Contraseña</label>
+        <input autocomplete="new-password"
+          [ngClass]="[recoverAccount.get('newPasswordRepeated')?.touched && recoverAccount.get('newPasswordRepeated')?.invalid ? 'form-error border-danger' : '']"
+          type="password" class="form-control" formControlName="newPasswordRepeated" name="password2"
+          placeholder="*******" [readOnly]="recoverAccount.get('code')?.invalid">
+      </div>
+
+      <div class="text-center text-danger mt-2">
+        @if ((recoverAccount.get('newPassword')?.touched && recoverAccount.get('newPassword')?.invalid) ||
+        (recoverAccount.get('newPasswordRepeated')?.touched && recoverAccount.get('newPasswordRepeated')?.invalid)) {
+
+        @if (recoverAccount.get('newPassword')?.errors?.['required'] ||
+        recoverAccount.get('newPasswordRepeated')?.errors?.['required']) {
+        <div><small>Debes ingresar y repetir la contraseña.</small></div>
+        }
+
+        @if (recoverAccount.get('newPassword')?.errors?.['pattern'] ||
+        recoverAccount.get('newPasswordRepeated')?.errors?.['pattern']) {
+        <div><small>La contraseña debe contener al menos una mayúscula, una minúscula, un número y un
+            símbolo.</small>
+        </div>
+        }
+
+        @if (recoverAccount.get('newPassword')?.errors?.['minlength'] ||
+        recoverAccount.get('newPasswordRepeated')?.errors?.['minlength']) {
+        <div><small>La contraseña debe tener al menos
+            {{ recoverAccount.get('newPassword')?.errors?.['minlength'].requiredLength }} caracteres.</small>
+        </div>
+        }
+
+        }
+
+        @if (recoverAccount.errors?.['passwordMismatch'] && recoverAccount.touched) {
+        <div><small>Las contraseñas no coinciden.</small></div>
+        }
+
+        @if (recoverAccount.touched && recoverAccount.invalid) {
+        <div><small>Rellenar campos.</small></div>
+        }
+
       </div>
 
       <div class="mb-3 d-grid">
-        <button type="submit" class="btn btn-primary" [disabled]="recoverAccount.invalid" (click)="validatedCode()">Confirmar código e ingresar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="recoverAccount.invalid"
+          (click)="validatedCode()">Confirmar código y contraseña</button>
       </div>
 
       <hr class="my-4">
