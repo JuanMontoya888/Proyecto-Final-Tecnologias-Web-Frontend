@@ -30,13 +30,15 @@ export class RegisterComponent {
   ngOnInit(): void {
     //Campos del formulario de registro
     this.registerForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: [JSON.parse(localStorage.getItem('emailRegister') || ''), [Validators.required, Validators.email]],
       name: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]],
       passwordRepeated: ['', [Validators.required, Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]],
       recaptcha: ['', Validators.required]
     }, { validator: this.passwordValidator() });
+
+    localStorage.removeItem('emailRegister');
   }
 
   // Validador de contraseña para nuestro registro con email

@@ -145,6 +145,7 @@ export class LoginComponent {
           LoaderService.cerrar();
 
           if (message === 'incorrect-password') Swal.fire('Error', 'Contraseña incorrecta', 'error');
+
           else if (message === 'account-blocked') {
             Swal.fire({
               title: "Error",
@@ -160,8 +161,24 @@ export class LoginComponent {
                 this.router.navigate(['/recoverAccount']);
               }
             });
+
           }
-          else Swal.fire('Error', 'Correo incorrecto', 'error');
+          else if (message === 'not-registered') {
+            Swal.fire({
+              title: "Error",
+              text: "Correo no se encuentra registrado!",
+              icon: "error",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Registrarte"
+            }).then((result) => {
+              if (result.isConfirmed) {
+                localStorage.setItem('emailRegister', JSON.stringify(this.loginForm.get('email')?.value));
+                this.router.navigate(['/register']);
+              }
+            });
+          }
 
         }
       }, (err) => {

@@ -34,6 +34,8 @@ export class RecoverAccountComponent {
       code: ['', [Validators.required, Validators.pattern(/^[0-9]{4,6}$/)]],
       codeWasSent: ['', [Validators.required]],
     });
+
+    localStorage.removeItem('email');
   }
 
   sendCode(): void {
