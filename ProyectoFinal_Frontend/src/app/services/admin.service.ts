@@ -82,4 +82,8 @@ export class AdminService {
     return this.http.post(this.urapi + '/sendMail', { email, reservacion, user });
   }
 
+  getAllReservas(): Observable<any> {
+      return this.http.get<any>(this.urapi+'/getReservas');
+    }
+
 }
