@@ -6,30 +6,35 @@ import { AuthenticateService } from '../../services/authenticate.service';
 import { NgClass } from '@angular/common';
 import { HotelService } from '../../services/hotel.service';
 import { AccesibilidadComponent } from '../accesibilidad/accesibilidad.component';
+import { text } from 'express';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterModule, NgClass, AccesibilidadComponent],
+  imports: [RouterModule, AccesibilidadComponent],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
+  userLogueado: any = null;
   adminLogueado: any = null;
   isLogging: boolean = true;
 
-  constructor(private adminService: AdminService, private router: Router, private authService: AuthenticateService, private sendFlag: HotelService) {}
+  constructor(
+    private adminService: AdminService,
+    private router: Router,
+    private authService: AuthenticateService,
+    private sendFlag: HotelService
+  ) { }
 
   ngOnInit(): void {
-    this.adminService.admin$.subscribe(admin => {
-      this.adminLogueado = admin;
+    this.adminService.admin$.subscribe((data: any) => {
+      if (!data) return;
+
+      data.isAdmin ?
+        this.adminLogueado = data.user : this.userLogueado = data.user;
     });
   }
 
-  changeStatus(flag: boolean): void {
-    this.isLogging = flag;
-
-    this.sendFlag.sendData(this.isLogging);
-  }
 
   logout() {
     Swal.fire({
@@ -43,7 +48,9 @@ export class NavbarComponent {
       if (result.isConfirmed) {
         this.adminService.logout();
         this.authService.logout();
+        this.userLogueado = this.adminLogueado = null;
         this.router.navigate(['/login']);
+
       }
     });
   }

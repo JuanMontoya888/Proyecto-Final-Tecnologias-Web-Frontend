@@ -31,23 +31,24 @@
           <app-accesibilidad></app-accesibilidad>
         </li>...
 
-
-        @if (adminLogueado; as admin) {
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/admin">Admin Panel</a>
-          </li>
+        @if (adminLogueado || userLogueado; as user) {
+          @if(adminLogueado) {
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/admin">Admin Panel</a>
+            </li>
+          }
           <li class="nav-item">
             <a class="nav-link" (click)="logout()" style="cursor: pointer;">Cerrar Sesión</a>
           </li>
           <li class="nav-item d-flex align-items-center ms-2">
             <span class="navbar-text text-primary fw-bold">
-              Hola, {{ admin.name }}!
+              Hola, {{ user.name }}!
             </span>
           </li>
         } @else {
           <li class="nav-item" style="display: flex;">
-            <a class="nav-link btn login-register-btn" (click)="changeStatus(true)" routerLink="/login" [ngClass]="[isLogging ? 'selected-btn' : '']">Login</a>
-            <a class="nav-link btn login-register-btn" (click)="changeStatus(false)" routerLink="/login" [ngClass]="[!isLogging ? 'selected-btn' : '']">Register</a>
+            <a class="nav-link btn login-register-btn" routerLink="/login">Login</a>
+            <a class="nav-link btn login-register-btn" routerLink="/register">Register</a>
           </li>
 
         }
