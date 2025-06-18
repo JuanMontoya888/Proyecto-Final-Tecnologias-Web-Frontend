@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { PanelReservacionesComponent } from '../panel-reservaciones/panel-reservaciones.component';
 import { PanelContactoComponent } from '../panel-contacto/panel-contacto.component';
 import { PanelComentariosComponent } from '../panel-comentarios/panel-comentarios.component';
+import { MainviewComponent } from "../../graphs/mainview/mainview.component";
 
 @Component({
   selector: 'app-admin-panel',
@@ -13,8 +14,9 @@ import { PanelComentariosComponent } from '../panel-comentarios/panel-comentario
     MatButtonModule,
     PanelReservacionesComponent,
     PanelContactoComponent,
-    PanelComentariosComponent
-  ],
+    PanelComentariosComponent,
+    MainviewComponent
+],
   templateUrl: './admin-panel.component.html',
   styleUrls: ['./admin-panel.component.css']
 })

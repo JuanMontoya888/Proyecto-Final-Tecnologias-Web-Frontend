@@ -13,25 +13,25 @@ import { AdminService } from '../../services/admin.service';
 export class MainviewComponent {
 
   
-  allReservas!:Reservacion[];
+  allReservas:Reservacion[]=[];
 
-  listaHoteles!:string[];
-  listaMeses!:number[];
+  listaHoteles:string[]=[];
+  listaMeses:number[]=[];
 
-  contadorMeses!:number[];
-  contadorHotel!:number[];
+  contadorMeses:number[]=[];
+  contadorHotel:number[]=[];
 
   constructor(private reservasServices:AdminService){}
 
   ngOnInit(): void {
     this.reservasServices.getAllReservas().subscribe(data => {
       this.allReservas=data.data;
+      console.log('Reservas:',this.allReservas);
+      this.procesarData();
     });
-
-    this.procesarData();
   }
 
-  procesarData(){
+  procesarData():void{
         this.allReservas.forEach((reservacion)=>{
           this.listaMeses.push(
             parseInt(reservacion.fechaInicio.substring(5,7),10)
@@ -42,6 +42,16 @@ export class MainviewComponent {
           )
           
         })
+        //inicializar arreglo
+        for(let i=0; i<12;i++){
+          this.contadorMeses[i]=0;
+        }
+        for(let i=0; i<10;i++){
+          this.contadorHotel[i]=0;
+        }
+
+
+        //llenar contador
 
         this.listaMeses.forEach((mes)=>{
           this.contadorMeses[mes-1]++;
@@ -61,5 +71,10 @@ export class MainviewComponent {
             case "Gran Hotel Ejecutivo": this.contadorHotel[9]++; break;
           }
         });
+
+        console.log('hoteles',this.listaHoteles);
+        console.log('meses',this.listaMeses);
+        console.log('hoteles-final  ',this.contadorHotel);
+        console.log('meses-final',this.contadorMeses);
   }
 }

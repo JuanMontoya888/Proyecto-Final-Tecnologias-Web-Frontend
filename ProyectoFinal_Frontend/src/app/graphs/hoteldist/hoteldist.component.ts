@@ -12,7 +12,8 @@ import { ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js';
 })
 export class HoteldistComponent {
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
-        @Input() reservacionesHoteles:number[]=[2,3,3,3,3,3,3,3,3,3];
+        @Input() reservacionesHoteles:number[]=/* [0,0,0,0,0,0,0,0,0,0]; */
+        [1,2,3,4,5,6,7,8,9,11];
 
 
 
@@ -25,14 +26,18 @@ export class HoteldistComponent {
       constructor(private hotelService: HotelService) {}
 
       ngOnInit(): void {
-    this.hotelService.obtenerHoteles().subscribe(data => {
-      this.hotelesOriginal = data;
+        this.hotelService.obtenerHoteles().subscribe(data => {
+          this.hotelesOriginal = data;
 
-      this.hotelesOriginal.forEach((hotel,index)=>{
-        this.listaHoteles[index]=hotel.nombre;
-      });
+          this.hotelesOriginal.forEach((hotel,index)=>{
+            this.listaHoteles[index]=hotel.nombre;
+          });
 
       console.log(this.listaHoteles);
+      console.log("prueba,", this.reservacionesHoteles);
+
+      this.chart?.update();
+      
     });
   }
 
@@ -76,17 +81,18 @@ export class HoteldistComponent {
         ],
         
       };
+
       public pieChartType: ChartType = 'pie';
 
       // events
       public chartClicked({
         event,
-        active,
-      }: {
+        active,}: {
         event: ChartEvent;
         active: object[];
       }): void {
-        //console.log(event, active);
+        console.log(event, active);
+        this.chart?.update();
       }
 
       public chartHovered({
@@ -97,6 +103,22 @@ export class HoteldistComponent {
         active: object[];
       }): void {
         //console.log(event, active);
+        this.chart?.update();
       }
 
+      public actualizar():void{
+        console.log(this.reservacionesHoteles);
+        this.pieChartData.datasets[0].data=this.reservacionesHoteles;
+        this.chart?.update();
+      }
+
+      ngOnChanges(){
+        this.actualizar();
+      }
+
+      ngAfterViewInit(){
+        this.actualizar();
+      }
+
+     
 }
