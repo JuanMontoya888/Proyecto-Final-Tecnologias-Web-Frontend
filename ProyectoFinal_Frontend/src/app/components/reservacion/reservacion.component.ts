@@ -167,9 +167,11 @@ export class ReservacionComponent implements OnInit {
   }
 
   enviar() {
+
+
   if (this.reservacionForm.valid) {
     Swal.fire({
-      title: '¿Confirmar reservación?',
+      title: '¿Desea confirmar la reservación?',
       text: 'Verifica que los datos sean correctos antes de guardar.',
       icon: 'question',
       showCancelButton: true,
