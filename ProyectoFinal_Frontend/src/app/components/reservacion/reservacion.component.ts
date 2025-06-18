@@ -88,8 +88,8 @@ export class ReservacionComponent implements OnInit {
   minDate: Date = new Date();
   maxDate: Date = new Date();
   tiposHabitacion: string[] = ['Individual', 'Doble', 'Suite', 'Familiar'];
-  email: string = 'jmaurixiomartinex@gmail.com';
-  user: string = 'Juan Montoya';
+  email!: string;
+  user!: string;
 
   constructor(
     private fb: FormBuilder,
@@ -180,6 +180,27 @@ export class ReservacionComponent implements OnInit {
         confirmButtonText: 'Sí, reservar',
         cancelButtonText: 'Cancelar'
       }).then(result => {
+
+        const userLogueado = localStorage.getItem('userLogueado') ? JSON.parse(localStorage.getItem('userLogueado') || '') : null;
+        this.email = userLogueado?.email;
+        this.user = userLogueado?.name;
+
+        if (!userLogueado) {
+          Swal.fire({
+            title: 'No autorizado',
+            text: 'Debes iniciar sesión para hacer una reservación. ¿Deseas iniciar sesión ahora?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Iniciar sesión',
+            cancelButtonText: 'Cancelar'
+          }).then(result => {
+            if (result.isConfirmed) {
+              this.router.navigate(['/login']);
+            }
+          });
+          return;
+        }
+
         if (result.isConfirmed) {
           const datos = this.reservacionForm.value;
 
@@ -204,38 +225,39 @@ export class ReservacionComponent implements OnInit {
                 this.precioBase = 0;
                 this.precioTotal = 0;
                 this.router.navigate(['/hoteles']);
-              });
 
-              //Hacemos la llamda a la Api con los datos para que envie el correo, solo si es que la reserva fue exitosa
-              this.adminService.sendMail(this.email, nuevaReservacion, this.user)
-                .subscribe((resp) => {
-                  const { ok } = resp;
 
-                  if (ok) {
-                    Swal.fire({
-                      title: "Reservación enviada a tu correo",
-                      showClass: {
-                        popup: `animate__animated animate__fadeInUp animate__faster`
-                      },
-                      hideClass: {
-                        popup: `animate__animated animate__fadeOutDown animate__faster`
-                      }
-                    });
-                  } else {
+                //Hacemos la llamda a la Api con los datos para que envie el correo, solo si es que la reserva fue exitosa
+                this.adminService.sendMail(this.email, nuevaReservacion, this.user)
+                  .subscribe((resp) => {
+                    const { ok } = resp;
+
+                    if (ok) {
+                      Swal.fire({
+                        title: "Reservación enviada a tu correo",
+                        showClass: {
+                          popup: `animate__animated animate__fadeInUp animate__faster`
+                        },
+                        hideClass: {
+                          popup: `animate__animated animate__fadeOutDown animate__faster`
+                        }
+                      });
+                    } else {
+                      Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Ocurrió algún error, vuelva a intentar",
+                      });
+                    }
+                  }, (err) => {
                     Swal.fire({
                       icon: "error",
                       title: "Error",
                       text: "Ocurrió algún error, vuelva a intentar",
                     });
-                  }
-                }, (err) => {
-                  Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: "Ocurrió algún error, vuelva a intentar",
                   });
-                });
 
+              });
             },
             error: (error) => {
               console.error('Error al guardar la reservación:', error);
@@ -270,12 +292,58 @@ export class ReservacionComponent implements OnInit {
               precioServicios: this.precioServicios,
               precioTotal: this.precioTotal
             };
+
+            this.reservas.createPost(nuevaReservacion).subscribe({
+              next: (res: any) => {
+                Swal.fire('¡Reservación completada!', 'Gracias por tu preferencia.', 'success').then(() => {
+                  this.reservacionForm.reset();
+                  this.precioServicios = 0;
+                  this.precioBase = 0;
+                  this.precioTotal = 0;
+                  this.router.navigate(['/hoteles']);
+                });
+
+                //Hacemos la llamda a la Api con los datos para que envie el correo, solo si es que la reserva fue exitosa
+                this.adminService.sendMail(this.email, nuevaReservacion, this.user)
+                  .subscribe((resp) => {
+                    const { ok } = resp;
+
+                    if (ok) {
+                      Swal.fire({
+                        title: "Reservación enviada a tu correo",
+                        showClass: {
+                          popup: `animate__animated animate__fadeInUp animate__faster`
+                        },
+                        hideClass: {
+                          popup: `animate__animated animate__fadeOutDown animate__faster`
+                        }
+                      });
+                    } else {
+                      Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Ocurrió algún error, vuelva a intentar",
+                      });
+                    }
+                  }, (err) => {
+                    Swal.fire({
+                      icon: "error",
+                      title: "Error",
+                      text: "Ocurrió algún error, vuelva a intentar",
+                    });
+                  });
+
+              },
+              error: (error) => {
+                console.error('Error al guardar la reservación:', error);
+                Swal.fire('Error', 'No se pudo guardar la reservación. Intenta de nuevo.', 'error');
+              }
+            });
           }
         });
       } else {
         Swal.fire('Error', 'Por favor completa todos los campos correctamente.', 'error');
       }
-
     }
   }
 }

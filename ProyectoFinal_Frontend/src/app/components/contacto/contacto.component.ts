@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Contacto } from '../../models/contacto';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-contacto',
@@ -19,7 +20,26 @@ export class ContactoComponent {
     mensaje: ''
   };
 
+  constructor(private router: Router) { }
+
   enviar(formulario: any) {
+    const userLogueado = localStorage.getItem('userLogueado');
+    if (!userLogueado) {
+      Swal.fire({
+        title: 'No autorizado',
+        text: 'Debes iniciar sesión para hacer una reservación. ¿Deseas iniciar sesión ahora?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Iniciar sesión',
+        cancelButtonText: 'Cancelar'
+      }).then(result => {
+        if (result.isConfirmed) {
+          this.router.navigate(['/login']);
+        }
+      });
+      return;
+    }
+
     if (formulario.valid) {
       Swal.fire({
         title: '¿Enviar solicitud?',
@@ -34,7 +54,7 @@ export class ContactoComponent {
           const contactosGuardados = localStorage.getItem('contactos');
           const contactos: Contacto[] = contactosGuardados ? JSON.parse(contactosGuardados) : [];
 
-          
+
           contactos.push({ ...this.contacto });
 
           // Guardar el nuevo array actualizado

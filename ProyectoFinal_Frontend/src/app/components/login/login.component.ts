@@ -190,34 +190,34 @@ export class LoginComponent {
   loginWithGoogle(): void {
     this.usersService.loginWithGoogle()
       .then((user) => {
-        let us;
         this.adminService.getUser(String(user.uid)).subscribe((res: any) => {
-          us = res['user'];
+          const us = res.user;
+          console.log(res, us)
+
+          if (us == null) {
+            // Convierte el nombre en formato correcto
+            const fullName =
+              String(user.displayName)?.split(' ').map(el => el.charAt(0).toUpperCase() + el.slice(1).toLowerCase()).join(' ');
+            const userName = fullName.split(' ').slice(0, 2).join('_') + '_' + String(user?.uid).slice(0, 2);
+
+            const dataSend = {
+              UID: user.uid,
+              authMethod: "google",
+              isAvailable: true,
+              attempts: 0,
+              name: fullName,
+              username: userName,
+              email: user.email
+            };
+
+            this.adminService.addUserGoogle(dataSend).subscribe((res_api) => {
+              Swal.fire(`Bienvenido ${user.name}`);
+            });
+          }
+          this.getUserDB(user.uid);
+
+          this.router.navigate(['/']);
         });
-
-        if (us !== undefined) {
-          // Convierte el nombre en formato correcto
-          const fullName =
-            String(user.displayName)?.split(' ').map(el => el.charAt(0).toUpperCase() + el.slice(1).toLowerCase()).join(' ');
-          const userName = fullName.split(' ').slice(0, 2).join('_') + '_' + String(user?.uid).slice(0, 2);
-
-          const dataSend = {
-            UID: user.uid,
-            authMethod: "google",
-            isAvailable: true,
-            attempts: 0,
-            name: fullName,
-            username: userName,
-            email: user.email
-          };
-
-          this.adminService.addUserGoogle(dataSend).subscribe((res_api) => {
-            Swal.fire(`Bienvenido ${user.name}`);
-          });
-        }
-        this.getUserDB(user.uid);
-
-        this.router.navigate(['/']);
 
       })
       .catch((error) => {
