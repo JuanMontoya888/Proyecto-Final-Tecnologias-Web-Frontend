@@ -44,8 +44,6 @@ export class RecoverAccountComponent {
 
         this.code = Number(code);
 
-        console.log(this.code);
-
         LoaderService.cerrar();
         if (ok) {
           this.recoverAccount.patchValue({ codeWasSent: true });
@@ -72,6 +70,13 @@ export class RecoverAccountComponent {
             text: "Ocurrió algún error, vuelva a intentar",
           });
         }
+      }, (error) => {
+        LoaderService.cerrar();
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Ocurrió algún error, vuelva a intentar",
+        });
       });
   }
 
@@ -107,6 +112,13 @@ export class RecoverAccountComponent {
             });
           }
 
+        }, (error) => {
+          LoaderService.cerrar();
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Ocurrió algún error, vuelva a intentar",
+          });
         });
     }
   }
