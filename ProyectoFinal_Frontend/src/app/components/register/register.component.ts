@@ -28,9 +28,10 @@ export class RegisterComponent {
   ) { }
 
   ngOnInit(): void {
+    const emailSent = localStorage.getItem('emailRegister') ? JSON.parse(localStorage.getItem('emailRegister') || '') : '';
     //Campos del formulario de registro
     this.registerForm = this.formBuilder.group({
-      email: [JSON.parse(localStorage.getItem('emailRegister') || ''), [Validators.required, Validators.email]],
+      email: [emailSent, [Validators.required, Validators.email]],
       name: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]],

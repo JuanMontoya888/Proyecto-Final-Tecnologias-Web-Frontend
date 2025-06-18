@@ -13,8 +13,10 @@ export class AdminService {
   constructor(public http: HttpClient) { }
 
   // Retornaremos un observable, para que lo espera hasta que se complete
-  getUser(uid: string): Observable<any> {
-    return this.http.post(this.urapi + '/getUser', { uid });
+  getUser(uid?: string, email?: string): Observable<any> {
+    return email ?
+      this.http.post(this.urapi + '/getUser', { email }) :
+      this.http.post(this.urapi + '/getUser', { uid });
   }
 
   loginWithEmail(email: string, password: string): Observable<any> {
