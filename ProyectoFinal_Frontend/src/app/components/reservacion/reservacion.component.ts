@@ -240,8 +240,17 @@ export class ReservacionComponent implements OnInit {
                         },
                         hideClass: {
                           popup: `animate__animated animate__fadeOutDown animate__faster`
+                        },
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Obtener QR"
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                          this.router.navigate(['/recoverAccount']);
                         }
                       });
+
                     } else {
                       Swal.fire({
                         icon: "error",
