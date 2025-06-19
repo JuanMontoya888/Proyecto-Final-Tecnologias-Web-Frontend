@@ -81,7 +81,6 @@ export class HoteldistComponent {
         ],
         
       };
-
       public pieChartType: ChartType = 'pie';
 
       // events
