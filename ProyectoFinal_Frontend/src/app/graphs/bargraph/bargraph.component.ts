@@ -13,6 +13,14 @@ export class BargraphComponent {
 
     @Input() datos:number[]=[2,3,3,3,3,3,3,3,3,3,2,2];
 
+    constructor(){
+      this.actualizar();
+    }
+
+    ngOnInit(){
+      this.chart?.update();
+    }
+
     public barChartOptions: ChartConfiguration<'bar'>['options'] = {
       // We use these empty structures as placeholders for dynamic theming.
       scales: {
@@ -76,7 +84,8 @@ export class BargraphComponent {
       event?: ChartEvent;
       active?: object[];
     }): void {
-      //console.log(event, active);
+      console.log(event, active);
+      this.chart?.update();
     }
 
     public chartHovered({
@@ -89,5 +98,13 @@ export class BargraphComponent {
       //console.log(event, active);
     }
 
+    public actualizar():void{
+      this.barChartData.datasets[0].data=this.datos;
+      this.chart?.update();
+    }
+
+    ngOnChanges(){
+      this.actualizar();
+    }
 
 }

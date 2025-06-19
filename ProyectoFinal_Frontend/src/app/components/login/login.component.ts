@@ -204,6 +204,7 @@ export class LoginComponent {
               UID: user.uid,
               authMethod: "google",
               isAvailable: true,
+              isAdmin: false,
               attempts: 0,
               name: fullName,
               username: userName,
