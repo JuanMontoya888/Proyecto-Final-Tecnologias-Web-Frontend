@@ -21,10 +21,7 @@
           <p><strong>Servicios:</strong> ${{ reservacion.precioServicios }}</p>
           <p><strong>Total:</strong> <strong>${{ reservacion.precioTotal }}</strong></p>
 
-            <div>
-                <qrcode [qrdata]="qrLink" [width]="256" 
-                [errorCorrectionLevel]="'M'"></qrcode>
-            </div>
+            
 
         </mat-card-content>
 
@@ -34,3 +31,4 @@
       </mat-card>
     </div>
 </div>
+
