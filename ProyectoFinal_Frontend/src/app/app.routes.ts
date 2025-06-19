@@ -10,6 +10,7 @@ import { AyudaComponent } from './components/ayuda/ayuda.component';
 import { RegisterComponent } from './components/register/register.component';
 import { RecoverAccountComponent } from './components/recover-account/recover-account.component';
 import { QrViewComponent } from './components/qr-view/qr-view.component';
+import { QrResultComponent } from './components/qr-result/qr-result.component';
 
 
 
@@ -25,4 +26,5 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'recoverAccount', component: RecoverAccountComponent },
   { path: 'datosReservacion/:id', component: QrViewComponent },
+  { path: 'infoReservacion/:id', component: QrResultComponent },
 ];

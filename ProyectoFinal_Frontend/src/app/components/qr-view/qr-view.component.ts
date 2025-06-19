@@ -3,7 +3,8 @@ import {QRCodeComponent} from 'angularx-qrcode'
 import { Reservacion } from '../../models/reservacion';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { AdminService } from '../../services/admin.service';
 
 @Component({
   selector: 'app-qr-view',
@@ -19,6 +20,14 @@ export class QrViewComponent {
 
   //variables
   reservacion!:Reservacion;
-  qrLink:string='';
+  qrLink:string='https://localhost:4200/infoReservacion:';
+
+  constructor( private route: ActivatedRoute,adminService:AdminService){
+
+  }
+  ngOnInit(){
+    const id = this.route.snapshot.paramMap.get('id');
+    this.qrLink+=id;
+  }
 
 }
