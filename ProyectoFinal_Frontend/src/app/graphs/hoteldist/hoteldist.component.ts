@@ -81,7 +81,6 @@ export class HoteldistComponent {
         ],
         
       };
-
       public pieChartType: ChartType = 'pie';
 
       // events
@@ -119,6 +118,5 @@ export class HoteldistComponent {
       ngAfterViewInit(){
         this.actualizar();
       }
-
      
 }
