@@ -6,6 +6,7 @@ import { PanelContactoComponent } from '../panel-contacto/panel-contacto.compone
 import { PanelComentariosComponent } from '../panel-comentarios/panel-comentarios.component';
 import { MainviewComponent } from "../../graphs/mainview/mainview.component";
 
+
 @Component({
   selector: 'app-admin-panel',
   standalone: true,
@@ -23,6 +24,9 @@ import { MainviewComponent } from "../../graphs/mainview/mainview.component";
 export class AdminPanelComponent implements OnInit {
   vista: 'reservaciones' | 'contacto' | 'comentarios' | null = null;
   adminNombre: string = '';
+  reservas: any[] = []; // Cambia el tipo según tu modelo de datos
+
+  constructor() {}
 
   ngOnInit(): void {
     const adminGuardado = localStorage.getItem('adminLogueado');
