@@ -22,6 +22,9 @@ import { Reservacion } from '../../models/reservacion';
 import { ValidatorsReserv } from '../reservacion/validators';
 import { HotelService } from '../../services/hotel.service';
 import Swal from 'sweetalert2';
+import { ReservasService } from '../../services/reservas.service';
+
+type ReservacionConId = Reservacion & { id: string };
 
 @Component({
   selector: 'app-panel-reservaciones',
@@ -45,7 +48,7 @@ import Swal from 'sweetalert2';
 })
 export class PanelReservacionesComponent implements OnInit {
   @Output() cerrar = new EventEmitter<void>();
-  reservaciones: Reservacion[] = [];
+  reservaciones: ReservacionConId[] = [];
   editandoIndex: number | null = null;
   reservacionForm!: FormGroup;
   hotelEditando!: any;
@@ -56,17 +59,29 @@ export class PanelReservacionesComponent implements OnInit {
   maxDate: Date = new Date();
   tiposHabitacion: string[] = ['Individual', 'Doble', 'Suite', 'Familiar'];
 
-  constructor(private fb: FormBuilder, private hotelService: HotelService) {}
+  constructor(
+    private fb: FormBuilder,
+    private hotelService: HotelService,
+    private reservasService: ReservasService
+  ) {}
 
   ngOnInit(): void {
     this.minDate.setDate(this.minDate.getDate() + 15);
     this.maxDate.setMonth(this.maxDate.getMonth() + 6);
 
-    const data = localStorage.getItem('reservaciones');
-    this.reservaciones = data ? JSON.parse(data) : [];
+    this.reservasService.obtenerReservas().subscribe({
+      next: (data) => {
+        this.reservaciones = data;
+        console.log('Reservas obtenidas:', data);
+      },
+      error: (error) => {
+        console.error('Error al obtener las reservas:', error);
+      }
+    });
   }
 
   eliminarReservacion(index: number) {
+    const id = this.reservaciones[index].id;
     Swal.fire({
       title: '¿Eliminar reservación?',
       text: 'Esta acción no se puede deshacer.',
@@ -76,9 +91,15 @@ export class PanelReservacionesComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then(result => {
       if (result.isConfirmed) {
-        this.reservaciones.splice(index, 1);
-        localStorage.setItem('reservaciones', JSON.stringify(this.reservaciones));
-        Swal.fire('Eliminado', 'La reservación fue eliminada.', 'success');
+        this.reservasService.eliminarReserva(id).subscribe({
+          next: () => {
+            this.reservaciones.splice(index, 1);
+            Swal.fire('Eliminado', 'La reservación fue eliminada.', 'success');
+          },
+          error: () => {
+            Swal.fire('Error', 'No se pudo eliminar la reservación.', 'error');
+          }
+        });
       }
     });
   }
@@ -154,10 +175,22 @@ export class PanelReservacionesComponent implements OnInit {
         precioTotal: this.precioTotal
       };
 
-      this.reservaciones[this.editandoIndex] = reservacionActualizada;
-      localStorage.setItem('reservaciones', JSON.stringify(this.reservaciones));
-      Swal.fire('¡Actualizado!', 'La reservación fue modificada.', 'success');
-      this.editandoIndex = null;
+      const id = this.reservaciones[this.editandoIndex].id;
+      console.log('ID a actualizar:', id);
+      console.log('Datos:', reservacionActualizada);
+
+
+      this.reservasService.actualizarReserva(id, reservacionActualizada).subscribe({
+        next: () => {
+          this.reservaciones[this.editandoIndex!] = { ...reservacionActualizada, id };
+          Swal.fire('¡Actualizado!', 'La reservación fue modificada.', 'success');
+          this.editandoIndex = null;
+        },
+        error: (error) => {
+          console.error('Error al actualizar:', error);
+          Swal.fire('Error', 'No se pudo actualizar la reservación.', 'error');
+        }
+      });
     }
   }
 
