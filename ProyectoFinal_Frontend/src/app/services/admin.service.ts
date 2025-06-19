@@ -83,7 +83,11 @@ export class AdminService {
   }
 
   getAllReservas(): Observable<any> {
-      return this.http.get<any>(this.urapi+'/getReservas');
-    }
+    return this.http.get<any>(this.urapi + '/getReservas');
+  }
+
+  getReservaByID(query: string): Observable<any> {
+    return this.http.post(this.urapi + '/getReservaBy', { query });
+  }
 
 }

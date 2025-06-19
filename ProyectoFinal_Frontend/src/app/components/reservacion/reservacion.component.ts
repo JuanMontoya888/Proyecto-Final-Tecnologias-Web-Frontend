@@ -219,6 +219,9 @@ export class ReservacionComponent implements OnInit {
 
           this.reservas.createPost(nuevaReservacion).subscribe({
             next: (res: any) => {
+              const { id } = res;
+
+              console.log(res);
               Swal.fire('¡Reservación completada!', 'Gracias por tu preferencia.', 'success').then(() => {
                 this.reservacionForm.reset();
                 this.precioServicios = 0;
@@ -247,7 +250,7 @@ export class ReservacionComponent implements OnInit {
                         confirmButtonText: "Obtener QR"
                       }).then((result) => {
                         if (result.isConfirmed) {
-                          this.router.navigate(['/recoverAccount']);
+                          this.router.navigate([`/datosReservacion/${id}`]);
                         }
                       });
 
