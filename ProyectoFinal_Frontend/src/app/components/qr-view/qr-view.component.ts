@@ -30,7 +30,9 @@ export class QrViewComponent {
     const id = this.route.snapshot.paramMap.get('id');
     this.adminService.getReservaByID(String(id))
       .subscribe((res) => {
-        
+       this.reservacion=res.data; 
+       this.reservacion.fechaFin=this.reservacion.fechaFin.substring(0,10);
+       this.reservacion.fechaInicio=this.reservacion.fechaInicio.substring(0,10);
       });
 
     this.qrLink += id;

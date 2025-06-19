@@ -1,6 +1,6 @@
 <div style="margin: 3rem 4rem 4rem 4rem">
     <div style="display: grid; justify-content: center;">
-        <mat-card class="w-75">
+        <mat-card class="w-120">
         <mat-card-header>
           <mat-card-title>Reservación de {{ reservacion.nombre }}</mat-card-title>
           <mat-card-subtitle>{{ reservacion.hotel }} - {{ reservacion.tipoHabitacion }}</mat-card-subtitle>
@@ -25,9 +25,9 @@
 
         </mat-card-content>
 
-        <mat-card-actions>
-          <button mat-raised-button color="warn" routerLink="/hoteles">Continuar</button>
-        </mat-card-actions>
+        <mat-card-actions style="display: grid; justify-content: right;">
+                 <button mat-raised-button color="warn" routerLink="/hoteles">Continuar</button>
+            </mat-card-actions>
       </mat-card>
     </div>
 </div>
