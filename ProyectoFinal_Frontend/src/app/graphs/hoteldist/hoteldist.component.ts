@@ -118,6 +118,5 @@ export class HoteldistComponent {
       ngAfterViewInit(){
         this.actualizar();
       }
-
      
 }
