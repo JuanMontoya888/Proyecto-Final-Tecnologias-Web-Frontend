@@ -1,4 +1,36 @@
 <div>
-    <qrcode [qrdata]="qrLink" [width]="256" 
-    [errorCorrectionLevel]="'M'"></qrcode>
+    <div>
+        <mat-card class="w-75">
+        <mat-card-header>
+          <mat-card-title>Reservación de {{ reservacion.nombre }}</mat-card-title>
+          <mat-card-subtitle>{{ reservacion.hotel }} - {{ reservacion.tipoHabitacion }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p><strong>Fecha:</strong> {{ reservacion.fechaInicio }} → {{ r.fechaFin }}</p>
+          <p><strong>Método de pago:</strong> {{ reservacion.metodoPago }}</p>
+
+          <p><strong>Servicios seleccionados:</strong></p>
+          <ul>
+            @for (s of reservacion.serviciosSeleccionados; track s) {
+              <li>{{ s }}</li>
+            }
+          </ul>
+
+          <p><strong>Precio base:</strong> ${{ reservacion.precioBase }}</p>
+          <p><strong>Servicios:</strong> ${{ reservacion.precioServicios }}</p>
+          <p><strong>Total:</strong> <strong>${{ reservacion.precioTotal }}</strong></p>
+
+            <div>
+                <qrcode [qrdata]="qrLink" [width]="256" 
+                [errorCorrectionLevel]="'M'"></qrcode>
+            </div>
+
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-raised-button color="warn" routerLink="/hoteles">Continuar</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
 </div>
