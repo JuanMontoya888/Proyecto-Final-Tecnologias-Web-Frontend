@@ -1,55 +1,77 @@
-
 <!-- NAVBAR -->
 <nav class="navbar navbar-dark bg-dark shadow-sm">
   <div class="container d-flex justify-content-between align-items-center">
+
     <!-- Logo -->
     <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/">
       <img src="Logo.png" alt="Logo Hotel" width="40" height="40" />
       <span class="fs-5 fw-bold">Hotel Paraíso</span>
     </a>
 
-    <!-- Botón hamburguesa -->
-    <button class="navbar-toggler" type="button" aria-label="Toggle menu" (click)="toggleMenu()" [attr.aria-expanded]="menuAbierto">
+    <!-- Menú horizontal (solo en desktop) -->
+    <ul class="navbar-nav d-none d-lg-flex flex-row align-items-center gap-3 m-0 p-0">
+      <li class="nav-item"><a class="nav-link" routerLink="/">Inicio</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/nosotros">Nosotros</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/contacto">Contacto</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/hoteles">Hoteles</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/ayuda">Ayuda</a></li>
+      <li class="nav-item"><app-accesibilidad></app-accesibilidad></li>
+
+      @if (adminLogueado; as admin) {
+        <li class="nav-item"><a class="nav-link" routerLink="/admin">Admin Panel</a></li>
+        <li class="nav-item"><a class="nav-link" (click)="logout()" style="cursor: pointer;">Cerrar Sesión</a></li>
+        <li class="nav-item d-flex align-items-center ms-2">
+          <span class="navbar-text text-primary fw-bold">Hola, {{ admin.name }}!</span>
+        </li>
+      } @else {
+        <li class="nav-item d-flex flex-row gap-2">
+          <a class="btn btn-outline-light px-3" routerLink="/login">Login</a>
+          <a class="btn btn-light text-dark px-3" routerLink="/login">Register</a>
+        </li>
+      }
+    </ul>
+
+    <!-- Botón hamburguesa para móvil -->
+    <button
+      class="navbar-toggler d-lg-none"
+      type="button"
+      aria-label="Toggle menu"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="menuAbierto"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
   </div>
 </nav>
 
-<!-- OVERLAY al abrir menú -->
-<div
-  class="menu-overlay" [class.show]="menuAbierto" (click)="cerrarMenu()"
-></div>
+<!-- Overlay para cerrar el menú al hacer clic afuera -->
+<div class="menu-overlay" [class.show]="menuAbierto" (click)="cerrarMenu()"></div>
 
-<!-- MENU DESPLEGABLE -->
+<!-- Menú lateral desplegable (solo en móvil) -->
 <div class="menu-sidebar" [class.abierto]="menuAbierto">
   <div class="menu-header d-flex justify-content-between align-items-center mb-4">
-    <h5 class="text-light m-0"></h5>
-    <button class="btn btn-sm btn-outline-light" (click)="cerrarMenu()"></button>
+    <h5 class="text-light m-0">Menú</h5>
+    <button class="btn btn-sm btn-outline-light" (click)="cerrarMenu()">✕</button>
   </div>
 
   <ul class="list-unstyled d-flex flex-column gap-3">
-    <li><a class="nav-link" routerLink="/" (click)="cerrarMenu()"> Inicio</a></li>
-    <li><a class="nav-link" routerLink="/nosotros" (click)="cerrarMenu()"> Nosotros</a></li>
-    <li><a class="nav-link" routerLink="/contacto" (click)="cerrarMenu()"> Contacto</a></li>
-    <li><a class="nav-link" routerLink="/hoteles" (click)="cerrarMenu()"> Hoteles</a></li>
-    <li><a class="nav-link" routerLink="/ayuda" (click)="cerrarMenu()"> Ayuda</a></li>
+    <li><a class="nav-link" routerLink="/" (click)="cerrarMenu()">Inicio</a></li>
+    <li><a class="nav-link" routerLink="/nosotros" (click)="cerrarMenu()">Nosotros</a></li>
+    <li><a class="nav-link" routerLink="/contacto" (click)="cerrarMenu()">Contacto</a></li>
+    <li><a class="nav-link" routerLink="/hoteles" (click)="cerrarMenu()">Hoteles</a></li>
+    <li><a class="nav-link" routerLink="/ayuda" (click)="cerrarMenu()">Ayuda</a></li>
 
     <li><app-accesibilidad></app-accesibilidad></li>
 
     @if (adminLogueado; as admin) {
-      <li><a class="nav-link" routerLink="/admin" (click)="cerrarMenu()"> Admin Panel</a></li>
-      <li><a class="nav-link" (click)="logout(); cerrarMenu()" style="cursor: pointer;"> Cerrar Sesión</a></li>
-      <li><span class="fw-bold text-primary"> Hola, {{ admin.name }}!</span></li>
+      <li><a class="nav-link" routerLink="/admin" (click)="cerrarMenu()">Admin Panel</a></li>
+      <li><a class="nav-link" (click)="logout(); cerrarMenu()" style="cursor: pointer;">Cerrar Sesión</a></li>
+      <li><span class="fw-bold text-primary">Hola, {{ admin.name }}!</span></li>
     } @else {
       <li class="d-flex flex-column gap-2 mt-2">
-        <a class="btn btn-outline-light w-100" (click)="changeStatus(true); cerrarMenu()" routerLink="/login" [ngClass]="[isLogging ? 'selected-btn' : '']">
-           Login
-        </a>
-        <a class="btn btn-light text-dark w-100" (click)="changeStatus(false); cerrarMenu()" routerLink="/login" [ngClass]="[!isLogging ? 'selected-btn' : '']">
-          Register
-        </a>
+        <a class="btn btn-outline-light w-100" (click)="cerrarMenu()" routerLink="/login">Login</a>
+        <a class="btn btn-light text-dark w-100" (click)="cerrarMenu()" routerLink="/login">Register</a>
       </li>
     }
   </ul>
 </div>
-
