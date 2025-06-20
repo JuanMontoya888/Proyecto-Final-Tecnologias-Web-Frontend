@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Contacto } from '../../models/contacto';
 import { Router } from '@angular/router';
+import { AdminService } from '../../services/admin.service';
 
 @Component({
   selector: 'app-contacto',
@@ -20,14 +21,14 @@ export class ContactoComponent {
     mensaje: ''
   };
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private adminService: AdminService) { }
 
   enviar(formulario: any) {
     const userLogueado = localStorage.getItem('userLogueado');
     if (!userLogueado) {
       Swal.fire({
         title: 'No autorizado',
-        text: 'Debes iniciar sesión para hacer una reservación. ¿Deseas iniciar sesión ahora?',
+        text: 'Debes iniciar sesión para enviar un comentario. ¿Deseas iniciar sesión ahora?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Iniciar sesión',

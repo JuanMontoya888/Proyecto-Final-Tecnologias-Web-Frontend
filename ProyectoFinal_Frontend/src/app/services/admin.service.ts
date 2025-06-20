@@ -90,4 +90,19 @@ export class AdminService {
     return this.http.post(this.urapi + '/getReservaBy', { query });
   }
 
+  addComentario(data: any): Observable<any> {
+    return this.http.post(this.urapi + '/addComentario', { data });
+  }
+
+  getComentarios(): Observable<any> {
+    return this.http.get(this.urapi + '/getComentarios');
+  }
+
+  addContacto(data: any): Observable<any> {
+    return this.http.post(this.urapi + '/addContacto', { data });
+  }
+
+  getContactos(): Observable<any> {
+    return this.http.get(this.urapi + '/getContactos');
+  }
 }

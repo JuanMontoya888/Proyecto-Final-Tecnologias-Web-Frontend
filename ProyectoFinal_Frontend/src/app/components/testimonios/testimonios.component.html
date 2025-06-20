@@ -2,23 +2,24 @@
   <h2 class="text-center mb-4">Opiniones de nuestros usuarios</h2>
 
   @if (testimonios.length === 0) {
-    <div class="alert alert-info text-center">
-      No hay comentarios aún. ¡Sé el primero en compartir tu experiencia!
-    </div>
+  <div class="alert alert-info text-center">
+    No hay comentarios aún. ¡Sé el primero en compartir tu experiencia!
+  </div>
   }
 
   <div class="row">
+    @if (testimonios) {
     @for (t of testimonios; track t; let i = $index) {
-      <div class="col-md-4 mb-3">
-        <div class="card h-100 shadow"
-        [ngClass]="{ 'bg-color-1': i % 2 === 0, 'bg-color-2': i % 2 !== 0 }">
-          <div class="card-body">
-            <h5 class="title">{{ t.nombre | capitalizar }}</h5>
-            <p class="card-text">{{ t.comentario | oracion }}</p>
-            <p class="text-warning">{{ t.estrellas | estrellas }}</p>
-          </div>
+    <div class="col-md-4 mb-3">
+      <div class="card h-100 shadow" [ngClass]="{ 'bg-color-1': i % 2 === 0, 'bg-color-2': i % 2 !== 0 }">
+        <div class="card-body">
+          <h5 class="title">{{ t.nombre | capitalizar }}</h5>
+          <p class="card-text">{{ t.comentario | oracion }}</p>
+          <p class="text-warning">{{ t.estrellas | estrellas }}</p>
         </div>
       </div>
+    </div>
+    }
     }
   </div>
 
