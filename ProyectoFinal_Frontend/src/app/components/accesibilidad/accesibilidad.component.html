@@ -1,4 +1,6 @@
-<div class="accesibilidad">
+
+
+<div class="accesibilidad-container">
   <button class="icono-btn" (click)="toggleMenu()" title="Opciones de accesibilidad">
     <!-- Ícono de accesibilidad -->
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -12,21 +14,32 @@
     </svg>
   </button>
 
-  <div *ngIf="menuAbierto" class="menu-accesibilidad">
-    <button (click)="lecturaActiva ? pararLectura() : leerContenido()">
-      {{ lecturaActiva ? '🔇 Detener voz' : '🔊 Leer contenido' }}
-    </button>
+  @if (menuAbierto) {
+    <div class="menu-accesibilidad">
+      <div class="menu-header">
+        <span>Accesibilidad</span>
+        <button class="cerrar-btn" (click)="cerrarMenu()">❌</button>
+      </div>
 
-    <!-- Submenú para tamaño de texto -->
-    <div class="submenu">
-      <button (click)="toggleTextoMenu()">🔍 Tamaño texto</button>
-      <div *ngIf="textoMenuAbierto" class="submenu-opciones">
-        <button (click)="aumentarTexto()">🔼 Aumentar</button>
-        <button (click)="disminuirTexto()">🔽 Disminuir</button>
-        <button (click)="restaurarTexto()"> Restaurar</button>
+      <div class="menu-opciones">
+        <button (click)="lecturaActiva ? pararLectura() : leerContenido()">
+          {{ lecturaActiva ? '🔇 Detener voz' : '🔊 Leer contenido' }}
+        </button>
+
+        <div class="submenu">
+          <button (click)="toggleTextoMenu()">🔍 Tamaño de texto</button>
+
+          @if (textoMenuAbierto) {
+            <div class="submenu-opciones">
+              <button (click)="aumentarTexto()">🔼 Aumentar</button>
+              <button (click)="disminuirTexto()">🔽 Disminuir</button>
+              <button (click)="restaurarTexto()">🔁 Restaurar</button>
+            </div>
+          }
+        </div>
+
+        <button (click)="cambiarContraste()">🌗 Cambiar contraste</button>
       </div>
     </div>
-
-    <button (click)="cambiarContraste()"> Cambiar contraste</button>
-  </div>
+  }
 </div>

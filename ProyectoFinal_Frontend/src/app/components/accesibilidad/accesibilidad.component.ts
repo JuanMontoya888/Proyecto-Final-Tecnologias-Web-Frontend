@@ -43,6 +43,11 @@ export class AccesibilidadComponent {
     window.speechSynthesis.speak(voz);
     this.lecturaActiva = true;
   }
+  
+  cerrarMenu() {
+    this.menuAbierto = false;
+  }
+
 
   pararLectura() {
     window.speechSynthesis.cancel();
