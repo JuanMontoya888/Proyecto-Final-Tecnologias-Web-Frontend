@@ -23,6 +23,7 @@ import { ValidatorsReserv } from '../reservacion/validators';
 import { HotelService } from '../../services/hotel.service';
 import Swal from 'sweetalert2';
 import { ReservasService } from '../../services/reservas.service';
+import { AdminService } from '../../services/admin.service';
 
 type ReservacionConId = Reservacion & { id: string };
 
@@ -63,7 +64,7 @@ export class PanelReservacionesComponent implements OnInit {
     private fb: FormBuilder,
     private hotelService: HotelService,
     private reservasService: ReservasService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.minDate.setDate(this.minDate.getDate() + 15);

@@ -98,6 +98,10 @@ export class AdminService {
     return this.http.get(this.urapi + '/getComentarios');
   }
 
+  deleteComentariosByID(id: string): Observable<any> {
+    return this.http.delete(this.urapi + `/deleteComentariosByID/${id}`);
+  }
+
   addContacto(data: any): Observable<any> {
     return this.http.post(this.urapi + '/addContacto', { data });
   }
@@ -105,4 +109,9 @@ export class AdminService {
   getContactos(): Observable<any> {
     return this.http.get(this.urapi + '/getContactos');
   }
+
+  deleteContactosByID(id: string): Observable<any> {
+    return this.http.delete(this.urapi + `/deleteContactosByID/${id}`);
+  }
+
 }

@@ -26,7 +26,7 @@ export class TestimoniosComponent {
     this.adminService.getComentarios()
       .subscribe(async (res) => {
         const { ok } = res;
-        
+
         if (ok) {
           const { data } = res;
           this.testimonios = data;

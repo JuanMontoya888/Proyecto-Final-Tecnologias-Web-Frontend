@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import Swal from 'sweetalert2';
 import { Contacto } from '../../models/contacto';
+import { AdminService } from '../../services/admin.service';
 
 @Component({
   selector: 'app-panel-contacto',
@@ -14,11 +15,13 @@ import { Contacto } from '../../models/contacto';
 })
 export class PanelContactoComponent implements OnInit {
   @Output() cerrar = new EventEmitter<void>();
-  contactos: Contacto[] = [];
+  contactos: any = [];
+
+  constructor(private adminService: AdminService) { }
+
 
   ngOnInit(): void {
-    const data = localStorage.getItem('contactos');
-    this.contactos = data ? JSON.parse(data) : [];
+    this.getData();
   }
 
   eliminarContacto(index: number) {
@@ -31,9 +34,27 @@ export class PanelContactoComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then(result => {
       if (result.isConfirmed) {
-        this.contactos.splice(index, 1);
-        localStorage.setItem('contactos', JSON.stringify(this.contactos));
-        Swal.fire('Eliminado', 'La solicitud fue eliminada.', 'success');
+        this.adminService.deleteContactosByID(this.contactos[index].id)
+          .subscribe((res) => {
+            const { ok } = res;
+
+            if (ok) {
+              Swal.fire('Eliminado', 'La solicitud fue eliminada.', 'success');
+              this.getData();
+            }
+          });
+
+      }
+    });
+  }
+
+  getData(): void {
+    this.adminService.getContactos().subscribe((res) => {
+      const { ok } = res;
+
+      if (ok) {
+        const { data } = res;
+        this.contactos = data;
       }
     });
   }
