@@ -17,28 +17,31 @@
       <li class="nav-item"><a class="nav-link" routerLink="/ayuda">Ayuda</a></li>
       <li class="nav-item"><app-accesibilidad></app-accesibilidad></li>
 
-      @if (adminLogueado; as admin) {
-        <li class="nav-item"><a class="nav-link" routerLink="/admin">Admin Panel</a></li>
-        <li class="nav-item"><a class="nav-link" (click)="logout()" style="cursor: pointer;">Cerrar Sesión</a></li>
-        <li class="nav-item d-flex align-items-center ms-2">
-          <span class="navbar-text text-primary fw-bold">Hola, {{ admin.name }}!</span>
-        </li>
+      @if (adminLogueado || userLogueado; as user) {
+      @if(adminLogueado) {
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/admin">Admin Panel</a>
+      </li>
+      }
+      <li class="nav-item">
+        <a class="nav-link" (click)="logout()" style="cursor: pointer;">Cerrar Sesión</a>
+      </li>
+      <li class="nav-item d-flex align-items-center ms-2">
+        <span class="navbar-text text-primary fw-bold">
+          ¡Hola, {{ user.name }}!
+        </span>
+      </li>
       } @else {
-        <li class="nav-item d-flex flex-row gap-2">
-          <a class="btn btn-outline-light px-3" routerLink="/login">Login</a>
-          <a class="btn btn-light text-dark px-3" routerLink="/login">Register</a>
-        </li>
+      <li class="nav-item" style="display: flex;">
+        <a class="nav-link btn login-register-btn" routerLink="/login">Login</a>
+        <a class="nav-link btn login-register-btn" routerLink="/register">Register</a>
+      </li>
       }
     </ul>
 
     <!-- Botón hamburguesa para móvil -->
-    <button
-      class="navbar-toggler d-lg-none"
-      type="button"
-      aria-label="Toggle menu"
-      (click)="toggleMenu()"
-      [attr.aria-expanded]="menuAbierto"
-    >
+    <button class="navbar-toggler d-lg-none" type="button" aria-label="Toggle menu" (click)="toggleMenu()"
+      [attr.aria-expanded]="menuAbierto">
       <span class="navbar-toggler-icon"></span>
     </button>
   </div>
@@ -63,15 +66,25 @@
 
     <li><app-accesibilidad></app-accesibilidad></li>
 
-    @if (adminLogueado; as admin) {
-      <li><a class="nav-link" routerLink="/admin" (click)="cerrarMenu()">Admin Panel</a></li>
-      <li><a class="nav-link" (click)="logout(); cerrarMenu()" style="cursor: pointer;">Cerrar Sesión</a></li>
-      <li><span class="fw-bold text-primary">Hola, {{ admin.name }}!</span></li>
+    @if (adminLogueado || userLogueado; as user) {
+    @if(adminLogueado) {
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/admin">Admin Panel</a>
+    </li>
+    }
+    <li class="nav-item">
+      <a class="nav-link" (click)="logout()" style="cursor: pointer;">Cerrar Sesión</a>
+    </li>
+    <li class="nav-item d-flex align-items-center ms-2">
+      <span class="navbar-text text-primary fw-bold">
+        ¡Hola, {{ user.name }}!
+      </span>
+    </li>
     } @else {
-      <li class="d-flex flex-column gap-2 mt-2">
-        <a class="btn btn-outline-light w-100" (click)="cerrarMenu()" routerLink="/login">Login</a>
-        <a class="btn btn-light text-dark w-100" (click)="cerrarMenu()" routerLink="/login">Register</a>
-      </li>
+    <li class="nav-item d-flex flex-column gap-2 mt-2" style="display: flex;">
+      <a class="nav-link btn login-register-btn" (click)="cerrarMenu()" routerLink="/login">Login</a>
+      <a class="nav-link btn login-register-btn" (click)="cerrarMenu()" routerLink="/register">Register</a>
+    </li>
     }
   </ul>
 </div>
