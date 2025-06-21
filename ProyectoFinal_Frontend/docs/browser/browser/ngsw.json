@@ -1,0 +1,123 @@
+{
+  "configVersion": 1,
+  "timestamp": 1750534116282,
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/favicon.ico",
+        "/index.html",
+        "/main-36E3VFYP.js",
+        "/manifest.webmanifest",
+        "/polyfills-FFHMD2TL.js",
+        "/scripts-NR4RWAQV.js",
+        "/styles-QH53VT3V.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/Logo.png",
+        "/assets/imagenes/carrusel1.jpg",
+        "/assets/imagenes/carrusel2.jpg",
+        "/assets/imagenes/carrusel3.jpg",
+        "/assets/imagenes/empresarial.jpg",
+        "/assets/imagenes/esteban.jpeg",
+        "/assets/imagenes/familia.jpg",
+        "/assets/imagenes/ricardo.jpg",
+        "/assets/imagenes/romantico.jpg",
+        "/assets/imagenes/yahir.jpg",
+        "/assets/img/hoteles/casabonita.jpg",
+        "/assets/img/hoteles/costadorada.jpg",
+        "/assets/img/hoteles/granhotelejecutivo.jpg",
+        "/assets/img/hoteles/hostaldelpueblo.jpg",
+        "/assets/img/hoteles/hotelcolonial.jpg",
+        "/assets/img/hoteles/hoteleconomicocentro.jpg",
+        "/assets/img/hoteles/hotelhistorico.jpg",
+        "/assets/img/hoteles/hoteloasis.jpg",
+        "/assets/img/hoteles/hotelsierra.jpg",
+        "/assets/img/hoteles/playaazulresort.jpg",
+        "/icons/icon-128x128.png",
+        "/icons/icon-144x144.png",
+        "/icons/icon-152x152.png",
+        "/icons/icon-192x192.png",
+        "/icons/icon-384x384.png",
+        "/icons/icon-512x512.png",
+        "/icons/icon-72x72.png",
+        "/icons/icon-96x96.png",
+        "/icons/letter-h-small(2).png"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/Logo.png": "01d106e40cdd84ea0edfff4bf036620d87793535",
+    "/assets/imagenes/carrusel1.jpg": "9fbb1e0ec5d1dea54ecdc77a15011369af93af64",
+    "/assets/imagenes/carrusel2.jpg": "65a6445f87b127880b7ae7d5f926ef847c3d496f",
+    "/assets/imagenes/carrusel3.jpg": "3ead2ee63e02ed55cbd7f9ad8af7274a6caf8262",
+    "/assets/imagenes/empresarial.jpg": "68c960d151405f06a809a918d113fe15d72e6181",
+    "/assets/imagenes/esteban.jpeg": "c8a5ec68b9f415184a6ac8207c7561efb34677c2",
+    "/assets/imagenes/familia.jpg": "baedd866e2d55fd6eb7047de55d505242cb623e1",
+    "/assets/imagenes/ricardo.jpg": "ca2eabbe0b321fe09c197d3dc09e464a9ffb87f9",
+    "/assets/imagenes/romantico.jpg": "9f7354f28be96e2ab219e134e6ed567bf7193988",
+    "/assets/imagenes/yahir.jpg": "25cf45d451893f3cc72305778adcca6e57df018f",
+    "/assets/img/hoteles/casabonita.jpg": "32ed64792b710ac9a3fa94832e1965fec6fc5115",
+    "/assets/img/hoteles/costadorada.jpg": "995035f741099fa8a574aafffd0ffb82278468da",
+    "/assets/img/hoteles/granhotelejecutivo.jpg": "1505ed5c79f1285d1f94c8a186032b6d6f9fe61c",
+    "/assets/img/hoteles/hostaldelpueblo.jpg": "71f5ec965ce6ea8a28a6135f83d94d6f6a9a7798",
+    "/assets/img/hoteles/hotelcolonial.jpg": "b2a18975d54e0a5782a3521ac814b6059b740a50",
+    "/assets/img/hoteles/hoteleconomicocentro.jpg": "9d73279eba5adc41312842977bc2c99de1a02a4f",
+    "/assets/img/hoteles/hotelhistorico.jpg": "58b1a278be0919bea3dd80eb5427c0b65d71a88e",
+    "/assets/img/hoteles/hoteloasis.jpg": "23647170624b2b3bc64600a48b4e1ca512aa3437",
+    "/assets/img/hoteles/hotelsierra.jpg": "eb1514ea84803d9be0935c2f19dfa0a2e3ffe25a",
+    "/assets/img/hoteles/playaazulresort.jpg": "2ee6c3a3f0468f79c12b0235571632680d11712c",
+    "/favicon.ico": "d639adfc45a5c1703e182985ba88b906d528f11e",
+    "/icons/icon-128x128.png": "f912963bdc6d5a38d8f1dd0afbaab2ce8d657acb",
+    "/icons/icon-144x144.png": "b155fd5f2fd5d2ea7760721063003c4cd95fd783",
+    "/icons/icon-152x152.png": "eae6e0f0c8afb8aaae339e2a569b43e9238e5e6c",
+    "/icons/icon-192x192.png": "15c4180454633880d98674aa7394656196c91584",
+    "/icons/icon-384x384.png": "94a915751ef6c9282df9aea405ad679230631814",
+    "/icons/icon-512x512.png": "1de182f76f7329dfa8f9fcdd1fdcdd695bea6a99",
+    "/icons/icon-72x72.png": "aa88a6096bd973be7f6d7a5489bfa6bc2463f8c4",
+    "/icons/icon-96x96.png": "7fb8f59c30ce2ff12c700321a0b39e14b3dc8f95",
+    "/icons/letter-h-small(2).png": "5c6ddf93d2a105096f782b3dd57f0777c88f2433",
+    "/index.html": "4606efbfa71291ade8c51ac746c11f880ae927f0",
+    "/main-36E3VFYP.js": "126dabbb863fd604fb8dbf972dba3d3b608c840e",
+    "/manifest.webmanifest": "7aa67a1e3b086e376bcdb60b0760763527aea4dc",
+    "/polyfills-FFHMD2TL.js": "f49b49a155bc7d192db62a4c15d0a612b460a667",
+    "/scripts-NR4RWAQV.js": "d032f7e853234d58aff97799044c83634be04654",
+    "/styles-QH53VT3V.css": "79ab7ef7a84c918899b520a4f2275dec820f6c68"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
