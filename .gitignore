@@ -147,3 +147,4 @@ firestore-key.json
 # en .gitignore
 ProyectoFinal_Backend/ProjectNodeJS/firestore-key.json
 
+docs/

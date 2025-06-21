@@ -234,7 +234,6 @@ export class ReservacionComponent implements OnInit {
             next: (res: any) => {
               const { id } = res;
 
-              console.log(res);
               Swal.fire('¡Reservación completada!', 'Gracias por tu preferencia.', 'success').then(() => {
                 this.reservacionForm.reset();
                 this.precioServicios = 0;

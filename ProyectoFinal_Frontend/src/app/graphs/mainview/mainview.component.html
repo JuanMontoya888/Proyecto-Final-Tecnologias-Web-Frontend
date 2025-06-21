@@ -1,10 +1,18 @@
-<div>
-    <h1 class="mb-4 text-light">Análisis</h1>
-</div>
-<div class="container-graphs">
-    <app-bargraph [datos]="contadorMeses"></app-bargraph>
-    <div style="padding: 0rem 7rem 0rem 2rem;">
-        <app-hoteldist [reservacionesHoteles]="contadorHotel"></app-hoteldist>
+<div class="container my-4">
+  <!-- Título -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1 class="text-light">Análisis</h1>
     </div>
+  </div>
+
+  <!-- Gráficos -->
+  <div class="row g-4 align-items-start">
+    <div class="col-12 col-md-6">
+      <app-bargraph [datos]="contadorMeses"></app-bargraph>
+    </div>
+    <div class="col-12 col-md-6">
+      <app-hoteldist [reservacionesHoteles]="contadorHotel"></app-hoteldist>
+    </div>
+  </div>
 </div>
-    
