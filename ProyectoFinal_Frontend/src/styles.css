@@ -20,3 +20,45 @@ body {
     margin: 0; 
     font-family: Roboto, "Helvetica Neue", sans-serif; 
 }
+
+
+/* Tema 0: fondo negro, texto amarillo */
+body.contraste-tema-0 {
+  background-color: #000  ;
+  color: #ff0  ;
+}
+
+/* Tema 1: fondo blanco, texto negro */
+body.contraste-tema-1 {
+  background-color: #fff  ;
+  color: #000  ;
+}
+
+/* Tema 2: fondo azul oscuro, texto blanco */
+body.contraste-tema-2 {
+  background-color: #002244  ;
+  color: #ffffff  ;
+}
+
+/* Subrayar texto visible en todos los temas */
+body[class^="contraste-tema-"] p,
+body[class^="contraste-tema-"] h1,
+body[class^="contraste-tema-"] h2,
+body[class^="contraste-tema-"] h3,
+body[class^="contraste-tema-"] h4,
+body[class^="contraste-tema-"] h5,
+body[class^="contraste-tema-"] h6,
+body[class^="contraste-tema-"] a,
+body[class^="contraste-tema-"] li,
+body[class^="contraste-tema-"] label,
+body[class^="contraste-tema-"] span,
+body[class^="contraste-tema-"] header,
+body[class^="contraste-tema-"] footer {
+  text-decoration: underline  ;
+}
+
+/* Botones dentro de contraste */
+body[class^="contraste-tema-"] button {
+  border: 2px solid white  ;
+  padding: 4px 8px;
+}

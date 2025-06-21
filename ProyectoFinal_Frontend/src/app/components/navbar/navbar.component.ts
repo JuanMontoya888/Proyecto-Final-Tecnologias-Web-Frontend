@@ -15,6 +15,16 @@ import { text } from 'express';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
+  
+menuAbierto = false;
+
+toggleMenu() {
+  this.menuAbierto = !this.menuAbierto;
+}
+
+cerrarMenu() {
+  this.menuAbierto = false;
+}
   userLogueado: any = null;
   adminLogueado: any = null;
   isLogging: boolean = true;
@@ -54,4 +64,14 @@ export class NavbarComponent {
       }
     });
   }
+
+  
+cerrarMenuSiClickFuera(event: MouseEvent) {
+  // Evita cerrar si haces click dentro del ul
+  const ul = (event.currentTarget as HTMLElement).querySelector('ul');
+  if (ul && ul.contains(event.target as Node)) {
+    return;
+  }
+  this.cerrarMenu();
+}
 }
