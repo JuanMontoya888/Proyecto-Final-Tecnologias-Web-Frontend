@@ -1,7 +1,6 @@
 body {
   font-family: 'Poppins', sans-serif;
   color: #333;
-  background-color: white;
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
@@ -114,7 +113,6 @@ h2.text-center:hover::after {
 form {
   margin-top: 3rem;
   padding: 2rem 3rem;
-  background-color: var(--blanco);
   border-radius: 20px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
   position: relative;
@@ -151,7 +149,6 @@ form textarea {
   border: 1px solid #ddd;
   padding: 1rem;
   font-size: 1.1rem;
-  background-color: var(--blanco);
   color: #333;
   width: 100%;
   transition: all 0.3s ease;

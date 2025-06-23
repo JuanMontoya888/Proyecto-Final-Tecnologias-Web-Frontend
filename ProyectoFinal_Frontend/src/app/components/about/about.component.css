@@ -93,7 +93,6 @@ section.container .col-md-6 i {
 }
 
 section.mt-5 {
-  background-color: white;
   padding: 3rem 0;
 }
 /* Estilos para el equipo de desarrollo */
@@ -123,7 +122,6 @@ section .col-md-4 {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   padding: 20px;
   border-radius: 15px;
-  background: var(--blanco);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 

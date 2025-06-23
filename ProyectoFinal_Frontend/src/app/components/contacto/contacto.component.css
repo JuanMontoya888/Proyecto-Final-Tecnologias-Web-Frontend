@@ -37,7 +37,6 @@ section.text-center h1::after {
 
 /* Estilos del formulario */
 form {
-  background: #ffffff;
   padding: 3rem;
   border-radius: 10px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); 
@@ -118,7 +117,6 @@ form button[type="submit"]:disabled {
 /* Iconos de contacto */
 .container .alert {
   font-size: 1rem;
-  background: var(--blanco);
   border: none;
   color: var(--azulgris);
   border-radius: 15px;

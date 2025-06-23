@@ -8,15 +8,20 @@
     --azulgris:#3d6c7a;
     --azulgrisf: #2c3e50;
     --blanco: whitesmoke;
-
+    --fondo-principal: whitesmoke;
     --special:"Comfortaa", sans-serif;
     --text: "Helvetica Neue", sans-serif;
     --other: "Franklin Gothic", sans-serif;
 }
 html, body { 
+   font-size: 1em;
     height: 100%; 
 }
 body { 
+  
+  font-size: inherit;
+  line-height: 1.5;
+  
     margin: 0; 
     font-family: Roboto, "Helvetica Neue", sans-serif; 
 }
@@ -24,14 +29,14 @@ body {
 
 /* Tema 0*/
 body.contraste-tema-0 {
-  background-color: #000  ;
-  color: white  ;
+  background-color: #000  !important;
+  color: white  !important;
 }
 
 /* Tema 1*/
 body.contraste-tema-1 {
-  background-color: #fff  ;
-  color: #000  ;
+  background-color: #fff  !important;
+  color: #000  !important;
 }
 
 /* Tema 2*/
@@ -58,7 +63,7 @@ body[class^="contraste-tema-"] section,
 body[class^="contraste-tema-"] div
 
  {
-  text-decoration: underline  ;
+  text-decoration: underline  !important;
 }
 
 /* Botones dentro de contraste */
