@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { SafePipe } from '../../pipes/safe.pipe';
 import { TestimoniosComponent } from '../testimonios/testimonios.component';
+import { LectorVozDirective } from '../../directives/lector-voz.directive';
 
 @Component({
   selector: 'app-home',
-  imports: [SafePipe,TestimoniosComponent],
+  imports: [SafePipe,TestimoniosComponent, LectorVozDirective],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

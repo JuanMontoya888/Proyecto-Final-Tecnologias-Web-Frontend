@@ -22,22 +22,22 @@ body {
 }
 
 
-/* Tema 0: fondo negro, texto amarillo */
+/* Tema 0*/
 body.contraste-tema-0 {
   background-color: #000  ;
-  color: #ff0  ;
+  color: white  ;
 }
 
-/* Tema 1: fondo blanco, texto negro */
+/* Tema 1*/
 body.contraste-tema-1 {
   background-color: #fff  ;
   color: #000  ;
 }
 
-/* Tema 2: fondo azul oscuro, texto blanco */
+/* Tema 2*/
 body.contraste-tema-2 {
   background-color: #002244  ;
-  color: #ffffff  ;
+  color: black  ;
 }
 
 /* Subrayar texto visible en todos los temas */
@@ -53,7 +53,11 @@ body[class^="contraste-tema-"] li,
 body[class^="contraste-tema-"] label,
 body[class^="contraste-tema-"] span,
 body[class^="contraste-tema-"] header,
-body[class^="contraste-tema-"] footer {
+body[class^="contraste-tema-"] footer,
+body[class^="contraste-tema-"] section,
+body[class^="contraste-tema-"] div
+
+ {
   text-decoration: underline  ;
 }
 

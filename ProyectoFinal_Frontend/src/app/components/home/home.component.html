@@ -1,40 +1,39 @@
-
-<div class="container">
+<div class="container" appLectorVoz>
   <!-- Carrusel -->
-  <div id="carouselExampleIndicators" class="carousel slide mb-5" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></button>
+  <div id="carouselExampleIndicators" class="carousel slide mb-5" data-bs-ride="carousel" appLectorVoz>
+    <div class="carousel-indicators" appLectorVoz>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" appLectorVoz></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" appLectorVoz></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" appLectorVoz></button>
     </div>
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img src="assets/imagenes/carrusel1.jpg" class="d-block w-100 img-fluid" alt="Hotel de lujo">
+    <div class="carousel-inner" appLectorVoz>
+      <div class="carousel-item active" appLectorVoz>
+        <img src="assets/imagenes/carrusel1.jpg" class="d-block w-100 img-fluid" alt="Hotel de lujo" appLectorVoz>
       </div>
-      <div class="carousel-item">
-        <img src="assets/imagenes/carrusel2.jpg" class="d-block w-100 img-fluid" alt="Vista al mar">
+      <div class="carousel-item" appLectorVoz>
+        <img src="assets/imagenes/carrusel2.jpg" class="d-block w-100 img-fluid" alt="Vista al mar" appLectorVoz>
       </div>
-      <div class="carousel-item">
-        <img src="assets/imagenes/carrusel3.jpg" class="d-block w-100 img-fluid" alt="Suite elegante">
+      <div class="carousel-item" appLectorVoz>
+        <img src="assets/imagenes/carrusel3.jpg" class="d-block w-100 img-fluid" alt="Suite elegante" appLectorVoz>
       </div>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon"></span>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev" appLectorVoz>
+      <span class="carousel-control-prev-icon" appLectorVoz></span>
     </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-      <span class="carousel-control-next-icon"></span>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next" appLectorVoz>
+      <span class="carousel-control-next-icon" appLectorVoz></span>
     </button>
   </div>
 
   <!-- Sección de Cards de Promociones -->
-  <section class="row mt-5 gx-4 gy-4">
+  <section class="row mt-5 gx-4 gy-4" appLectorVoz>
     @for (promo of promociones; track promo) {
-      <div class="col-12 col-md-4">
-        <div class="card h-100">
-          <img [src]="promo.imagen" class="card-img-top" alt="Promoción">
-          <div class="card-body">
-            <h5 class="card-title">{{ promo.titulo }}</h5>
-            <p class="card-text">{{ promo.descripcion }}</p>
+      <div class="col-12 col-md-4" appLectorVoz>
+        <div class="card h-100" appLectorVoz>
+          <img [src]="promo.imagen" class="card-img-top" alt="Promoción" appLectorVoz>
+          <div class="card-body" appLectorVoz>
+            <h5 class="card-title" appLectorVoz>{{ promo.titulo }}</h5>
+            <p class="card-text" appLectorVoz>{{ promo.descripcion }}</p>
           </div>
         </div>
       </div>
@@ -42,14 +41,14 @@
   </section>
 
   <!-- Sección de Video Promocional -->
-  <section class="video-section text-center my-5 px-3">
-    <h2 class="fs-3 fs-md-2">Explora tu próximo destino</h2>
-    <p class="fs-6 fs-md-5">Descubre todo lo que tenemos preparado para ti</p>
-    <div class="ratio ratio-16x9">
-      <iframe [src]="'https://www.youtube.com/embed/Scxs7L0vhZ4' | safe" title="Video promocional" allowfullscreen></iframe>
+  <section class="video-section text-center my-5 px-3" appLectorVoz>
+    <h2 class="fs-3 fs-md-2" appLectorVoz>Explora tu próximo destino</h2>
+    <p class="fs-6 fs-md-5" appLectorVoz>Descubre todo lo que tenemos preparado para ti</p>
+    <div class="ratio ratio-16x9" appLectorVoz>
+      <iframe [src]="'https://www.youtube.com/embed/Scxs7L0vhZ4' | safe" title="Video promocional" allowfullscreen appLectorVoz></iframe>
     </div>
   </section>
 
   <!-- Sección de Testimonios -->
-  <app-testimonios></app-testimonios>
+  <app-testimonios ></app-testimonios>
 </div>

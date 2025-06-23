@@ -22,9 +22,10 @@
       </div>
 
       <div class="menu-opciones">
-        <button (click)="lecturaActiva ? pararLectura() : leerContenido()">
-          {{ lecturaActiva ? '🔇 Detener voz' : '🔊 Leer contenido' }}
-        </button>
+        <button type="button" (click)="lecturaActiva ? pararLectura() : leerContenido()">
+  {{ lecturaActiva ? '🔇 Detener voz' : '🔊 Leer contenido' }}
+</button>
+
 
         <div class="submenu">
           <button (click)="toggleTextoMenu()">🔍 Tamaño de texto</button>

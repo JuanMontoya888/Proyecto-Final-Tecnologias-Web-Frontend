@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, Renderer2 } from '@angular/core';
+import { Component, Renderer2 } from '@angular/core'; // Ajusta la ruta si es necesario
+import { AccesibilidadService } from '../../services/accesibilidad.service';
 
 @Component({
   selector: 'app-accesibilidad',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './accesibilidad.component.html',
   styleUrl: './accesibilidad.component.css'
@@ -14,10 +16,13 @@ export class AccesibilidadComponent {
   textoMenuAbierto = false;
   escala = 1;
 
-  temaContraste = -1; // -1 sin contraste
+  temaContraste = -1;
   totalTemas = 3;
 
-  constructor(private renderer: Renderer2) {
+  constructor(
+    private renderer: Renderer2,
+    public accesibilidadService: AccesibilidadService
+  ) {
     // Restaurar preferencias
     const escalaGuardada = localStorage.getItem('escalaTexto');
     if (escalaGuardada) {
@@ -36,25 +41,22 @@ export class AccesibilidadComponent {
     this.menuAbierto = !this.menuAbierto;
   }
 
+
   leerContenido() {
-    const texto = document.body.innerText;
-    const voz = new SpeechSynthesisUtterance(texto);
-    voz.lang = 'es-ES';
-    window.speechSynthesis.speak(voz);
+    this.accesibilidadService.activarLector();
     this.lecturaActiva = true;
   }
-  
+
+  pararLectura() {
+    this.accesibilidadService.desactivarLector();
+    this.lecturaActiva = false;
+  }
+
   cerrarMenu() {
     this.menuAbierto = false;
   }
 
-
-  pararLectura() {
-    window.speechSynthesis.cancel();
-    this.lecturaActiva = false;
-  }
-
-  toggleTextoMenu() {
+  toggleTextoMenu(): void {
     this.textoMenuAbierto = !this.textoMenuAbierto;
   }
 
