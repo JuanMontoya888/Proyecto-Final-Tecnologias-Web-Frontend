@@ -7,10 +7,11 @@ import { NgClass } from '@angular/common';
 import { HotelService } from '../../services/hotel.service';
 import { AccesibilidadComponent } from '../accesibilidad/accesibilidad.component';
 import { text } from 'express';
+import { LectorVozDirective } from '../../directives/lector-voz.directive';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterModule, AccesibilidadComponent],
+  imports: [RouterModule, AccesibilidadComponent, LectorVozDirective],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })

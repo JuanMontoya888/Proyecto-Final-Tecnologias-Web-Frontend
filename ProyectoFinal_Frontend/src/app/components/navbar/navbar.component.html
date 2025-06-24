@@ -5,26 +5,26 @@
     <!-- Logo -->
     <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/">
       <img src="Logo.png" alt="Logo Hotel" width="40" height="40" />
-      <span class="fs-5 fw-bold">Hotel Paraíso</span>
+      <span class="fs-5 fw-bold" appLectorVoz>Hotel Paraíso</span>
     </a>
 
     <!-- Menú horizontal (solo en desktop) -->
     <ul class="navbar-nav d-none d-lg-flex flex-row align-items-center gap-3 m-0 p-0">
-      <li class="nav-item"><a class="nav-link" routerLink="/">Inicio</a></li>
-      <li class="nav-item"><a class="nav-link" routerLink="/nosotros">Nosotros</a></li>
-      <li class="nav-item"><a class="nav-link" routerLink="/contacto">Contacto</a></li>
-      <li class="nav-item"><a class="nav-link" routerLink="/hoteles">Hoteles</a></li>
-      <li class="nav-item"><a class="nav-link" routerLink="/ayuda">Ayuda</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/" appLectorVoz>Inicio</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/nosotros" appLectorVoz>Nosotros</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/contacto" appLectorVoz>Contacto</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/hoteles" appLectorVoz>Hoteles</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/ayuda" appLectorVoz>Ayuda</a></li>
       <li class="nav-item"><app-accesibilidad></app-accesibilidad></li>
 
       @if (adminLogueado || userLogueado; as user) {
       @if(adminLogueado) {
       <li class="nav-item">
-        <a class="nav-link" routerLink="/admin">Admin Panel</a>
+        <a class="nav-link" routerLink="/admin" appLectorVoz> Admin Panel</a>
       </li>
       }
       <li class="nav-item">
-        <a class="nav-link" (click)="logout()" style="cursor: pointer;">Cerrar Sesión</a>
+        <a class="nav-link" (click)="logout()" style="cursor: pointer;" appLectorVoz>Cerrar Sesión</a>
       </li>
       <li class="nav-item d-flex align-items-center ms-2">
         <span class="navbar-text text-primary fw-bold">
@@ -33,8 +33,8 @@
       </li>
       } @else {
       <li class="nav-item" style="display: flex;">
-        <a class="nav-link btn login-register-btn" routerLink="/login">Login</a>
-        <a class="nav-link btn login-register-btn" routerLink="/register">Register</a>
+        <a class="nav-link btn login-register-btn" routerLink="/login" appLectorVoz>Login</a>
+        <a class="nav-link btn login-register-btn" routerLink="/register" appLectorVoz>Register</a>
       </li>
       }
     </ul>
@@ -58,22 +58,22 @@
   </div>
 
   <ul class="list-unstyled d-flex flex-column gap-3">
-    <li><a class="nav-link" routerLink="/" (click)="cerrarMenu()">Inicio</a></li>
-    <li><a class="nav-link" routerLink="/nosotros" (click)="cerrarMenu()">Nosotros</a></li>
-    <li><a class="nav-link" routerLink="/contacto" (click)="cerrarMenu()">Contacto</a></li>
-    <li><a class="nav-link" routerLink="/hoteles" (click)="cerrarMenu()">Hoteles</a></li>
-    <li><a class="nav-link" routerLink="/ayuda" (click)="cerrarMenu()">Ayuda</a></li>
+    <li><a class="nav-link" routerLink="/" (click)="cerrarMenu()" appLectorVoz>Inicio</a></li>
+    <li><a class="nav-link" routerLink="/nosotros" (click)="cerrarMenu()" appLectorVoz>Nosotros</a></li>
+    <li><a class="nav-link" routerLink="/contacto" (click)="cerrarMenu()" appLectorVoz>Contacto</a></li>
+    <li><a class="nav-link" routerLink="/hoteles" (click)="cerrarMenu()" appLectorVoz>Hoteles</a></li>
+    <li><a class="nav-link" routerLink="/ayuda" (click)="cerrarMenu()" appLectorVoz>Ayuda</a></li>
 
     <li><app-accesibilidad></app-accesibilidad></li>
 
     @if (adminLogueado || userLogueado; as user) {
     @if(adminLogueado) {
     <li class="nav-item">
-      <a class="nav-link" (click)="cerrarMenu()" routerLink="/admin">Admin Panel</a>
+      <a class="nav-link" routerLink="/admin" appLectorVoz>Admin Panel</a>
     </li>
     }
     <li class="nav-item">
-      <a class="nav-link" (click)="logout()" style="cursor: pointer;">Cerrar Sesión</a>
+      <a class="nav-link" (click)="logout()" style="cursor: pointer;" appLectorVoz>Cerrar Sesión</a>
     </li>
     <li class="nav-item d-flex align-items-center ms-2">
       <span class="navbar-text text-primary fw-bold">
@@ -82,8 +82,8 @@
     </li>
     } @else {
     <li class="nav-item d-flex flex-column gap-2 mt-2" style="display: flex;">
-      <a class="nav-link btn login-register-btn" (click)="cerrarMenu()" routerLink="/login">Login</a>
-      <a class="nav-link btn login-register-btn" (click)="cerrarMenu()" routerLink="/register">Register</a>
+      <a class="nav-link btn login-register-btn" (click)="cerrarMenu()" routerLink="/login" appLectorVoz>Login</a>
+      <a class="nav-link btn login-register-btn" (click)="cerrarMenu()" routerLink="/register" appLectorVoz>Register</a>
     </li>
     }
   </ul>

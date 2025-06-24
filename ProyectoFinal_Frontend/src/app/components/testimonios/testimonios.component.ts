@@ -8,11 +8,12 @@ import { FormsModule } from '@angular/forms';
 import { OracionPipe } from '../../pipes/oracion.pipe';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { LectorVozDirective } from '../../directives/lector-voz.directive';
 import { AdminService } from '../../services/admin.service';
 
 @Component({
   selector: 'app-testimonios',
-  imports: [CommonModule, CapitalizarPipe, EstrellasPipe, OracionPipe, FormsModule],
+  imports: [CommonModule, CapitalizarPipe, EstrellasPipe, OracionPipe, FormsModule, LectorVozDirective],
   templateUrl: './testimonios.component.html',
   styleUrl: './testimonios.component.css'
 })
@@ -24,7 +25,7 @@ export class TestimoniosComponent {
 
   ngOnInit() {
     this.adminService.getComentarios()
-      .subscribe(async (res) => {
+      .subscribe(async (res: any) => {
         const { ok } = res;
 
         if (ok) {
@@ -56,7 +57,7 @@ export class TestimoniosComponent {
       this.testimonios.push({ ...this.nuevo });
 
       this.adminService.addComentario(this.nuevo)
-        .subscribe((res) => {
+        .subscribe((res: any) => {
           const { ok } = res;
 
           if (ok) {

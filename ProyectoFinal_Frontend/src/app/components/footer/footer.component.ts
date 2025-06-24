@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { LectorVozDirective } from '../../directives/lector-voz.directive';
 
 @Component({
   selector: 'app-footer',
-  imports: [],
+  imports: [LectorVozDirective],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.css'
 })

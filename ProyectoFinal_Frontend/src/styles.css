@@ -8,36 +8,41 @@
     --azulgris:#3d6c7a;
     --azulgrisf: #2c3e50;
     --blanco: whitesmoke;
-
+    --fondo-principal: whitesmoke;
     --special:"Comfortaa", sans-serif;
     --text: "Helvetica Neue", sans-serif;
     --other: "Franklin Gothic", sans-serif;
 }
 html, body { 
+   font-size: 1em;
     height: 100%; 
 }
 body { 
+  
+  font-size: inherit;
+  line-height: 1.5;
+  
     margin: 0; 
     font-family: Roboto, "Helvetica Neue", sans-serif; 
 }
 
 
-/* Tema 0: fondo negro, texto amarillo */
+/* Tema 0*/
 body.contraste-tema-0 {
-  background-color: #000  ;
-  color: #ff0  ;
+  background-color: #000  !important;
+  color: white  !important;
 }
 
-/* Tema 1: fondo blanco, texto negro */
+/* Tema 1*/
 body.contraste-tema-1 {
-  background-color: #fff  ;
-  color: #000  ;
+  background-color: #fff  !important;
+  color: #000  !important;
 }
 
-/* Tema 2: fondo azul oscuro, texto blanco */
+/* Tema 2*/
 body.contraste-tema-2 {
   background-color: #002244  ;
-  color: #ffffff  ;
+  color: black  ;
 }
 
 /* Subrayar texto visible en todos los temas */
@@ -53,8 +58,12 @@ body[class^="contraste-tema-"] li,
 body[class^="contraste-tema-"] label,
 body[class^="contraste-tema-"] span,
 body[class^="contraste-tema-"] header,
-body[class^="contraste-tema-"] footer {
-  text-decoration: underline  ;
+body[class^="contraste-tema-"] footer,
+body[class^="contraste-tema-"] section,
+body[class^="contraste-tema-"] div
+
+ {
+  text-decoration: underline  !important;
 }
 
 /* Botones dentro de contraste */

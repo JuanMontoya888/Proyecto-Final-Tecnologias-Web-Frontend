@@ -13,6 +13,9 @@ body {
   box-sizing: border-box;
 }
 
+h2{
+  font-size: 1em;
+}
 /* Estilos del carrusel */
 .carousel-inner img {
   height: 500px;
@@ -42,6 +45,7 @@ body {
 
 /* Estilos de las promociones */
 section.row.mt-5 .card {
+
   border: none;
   overflow: hidden;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);

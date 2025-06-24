@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { LectorVozDirective } from '../../directives/lector-voz.directive';
 
 @Component({
   selector: 'app-header',
-  imports: [],
+  imports: [LectorVozDirective],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
