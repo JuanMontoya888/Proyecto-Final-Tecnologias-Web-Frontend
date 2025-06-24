@@ -74,6 +74,9 @@ export class LoginComponent {
       .subscribe((res) => {
         LoaderService.cerrar();
         const { ok } = res;
+
+        console.log(ok);
+
         if (ok) {
           this.usersService.loginWithPhoneNumber(String(this.loginFormPhoneNumber.get('phoneNumber')?.value), this.recaptchaVerifier)
             .then((result) => {
@@ -190,6 +193,7 @@ export class LoginComponent {
   loginWithGoogle(): void {
     this.usersService.loginWithGoogle()
       .then((user) => {
+        LoaderService.mostrar('Iniciando sesion ...');
         this.adminService.getUser(String(user.uid)).subscribe((res: any) => {
           const us = res.user;
           console.log(res, us)
@@ -213,11 +217,15 @@ export class LoginComponent {
 
             this.adminService.addUserGoogle(dataSend).subscribe((res_api) => {
               Swal.fire(`Bienvenido ${user.name}`);
+              LoaderService.cerrar();
             });
           }
           this.getUserDB(user.uid);
 
           this.router.navigate(['/']);
+        }, (error) => {
+          LoaderService.cerrar();
+          Swal.fire('Error', 'No se pudo conectar con el servidor', 'error');
         });
 
       })
