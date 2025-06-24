@@ -1,91 +1,99 @@
-<div class="body_login_register">
-  <section class="text-center mt-4">
+<div class="container body_login_register py-5">
+  <section class="text-center mb-4">
     <h1>Iniciar Sesión</h1>
   </section>
 
-  <section class="d-flex justify-content-center mt-5">
-    <form [formGroup]="isLoggingWithPhone ? loginFormPhoneNumber : loginForm" class="w-50">
-      <div class="btn-group w-80 d-flex justify-content-center mb-3" role="group" aria-label="Toggle login method">
-        <button type="button" class="btn" [class.btn-primary]="!isLoggingWithPhone"
-          [class.btn-outline-primary]="isLoggingWithPhone" (click)="isLoggingWithPhone = false">Email</button>
+  <section class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+      <form [formGroup]="isLoggingWithPhone ? loginFormPhoneNumber : loginForm">
 
-        <button type="button" class="btn" [class.btn-primary]="isLoggingWithPhone"
-          [class.btn-outline-primary]="!isLoggingWithPhone" (click)="isLoggingWithPhone = true">Teléfono</button>
-      </div>
-
-
-      @if (isLoggingWithPhone) {
-      <div class="mb-3">
-        <label for="phoneNumber" class="form-label">Número de Teléfono</label>
-        <input type="text" id="phoneNumber" name="phoneNumber" formControlName="phoneNumber" class="form-control"
-          placeholder="+521XXXXXXXXXX">
-      </div>
-
-      <div class="mb-3 d-grid">
-        <button type="button" class="btn btn-secondary"
-          (click)="sendCode(); loginFormPhoneNumber.patchValue({sendCodePressed: true})">
-          Enviar código por SMS
-        </button>
-      </div>
-
-      <!-- Código de verificación -->
-      <div class="mb-3">
-        <label for="code" class="form-label">Código de verificación</label>
-        <input type="text" id="code" name="code" formControlName="code" class="form-control"
-          [ngClass]="{'is-invalid': loginFormPhoneNumber.get('code')?.touched && loginFormPhoneNumber.get('code')?.invalid}"
-          placeholder="123456">
-      </div>
-
-      <!-- Submit -->
-      <div class="mb-3 d-grid">
-        <button type="submit" (click)="login()" class="btn btn-primary"
-          [disabled]="loginFormPhoneNumber.invalid">Confirmar código e ingresar</button>
-      </div>
-
-      <hr class="my-4">
-
-      <!-- Login con Google -->
-      <div class="d-flex justify-content-center gap-3">
-        <div class="svg" (click)="loginWithGoogle()" title="Ingresar con Google" style="cursor: pointer;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
-            stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945z" />
-          </svg>
-        </div>
-      </div>
-
-      } @else {
-
-      <div class="mb-3">
-        <label for="mail" class="form-label">Usuario</label>
-        <input
-          [ngClass]="[loginForm.get('email')?.touched && loginForm.get('email')?.invalid ? 'form-error border-danger' : '']"
-          type="text" class="form-control" formControlName="email" name="email" placeholder="user@gmail.com">
-      </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">Contraseña</label>
-        <input
-          [ngClass]="[loginForm.get('password')?.touched && loginForm.get('password')?.invalid ? 'form-error border-danger' : '']"
-          type="password" class="form-control" formControlName="password" name="password" placeholder="*******">
-      </div>
-
-      <button type="submit" (click)="login()" class="btn btn-primary w-100"
-        [disabled]="loginForm.invalid">Entrar</button>
-
-      <div class="d-flex justify-content-center" style="padding: 1rem; grid-gap: 1rem;">
-        <div class="svg" (click)="loginWithGoogle()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
-            stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945z" />
-          </svg>
+        <!-- Toggle de método -->
+        <div class="btn-group w-100 mb-4" role="group" aria-label="Toggle login method">
+          <button type="button" class="btn"
+            [class.btn-primary]="!isLoggingWithPhone"
+            [class.btn-outline-primary]="isLoggingWithPhone"
+            (click)="isLoggingWithPhone = false">
+            Email
+          </button>
+          <button type="button" class="btn"
+            [class.btn-primary]="isLoggingWithPhone"
+            [class.btn-outline-primary]="!isLoggingWithPhone"
+            (click)="isLoggingWithPhone = true">
+            Teléfono
+          </button>
         </div>
 
-      </div>
-      }
+        <!-- 📱 Login con Teléfono -->
+        @if (isLoggingWithPhone) {
+          <div class="mb-3">
+            <label for="phoneNumber" class="form-label">Número de Teléfono</label>
+            <input type="text" id="phoneNumber" name="phoneNumber" formControlName="phoneNumber"
+              class="form-control" placeholder="+521XXXXXXXXXX">
+          </div>
 
-    </form>
+          <div class="mb-3 d-grid">
+            <button type="button" class="btn btn-secondary"
+              (click)="sendCode(); loginFormPhoneNumber.patchValue({sendCodePressed: true})">
+              Enviar código por SMS
+            </button>
+          </div>
+
+          <div class="mb-3">
+            <label for="code" class="form-label">Código de verificación</label>
+            <input type="text" id="code" name="code" formControlName="code" class="form-control"
+              [ngClass]="{'is-invalid': loginFormPhoneNumber.get('code')?.touched && loginFormPhoneNumber.get('code')?.invalid}"
+              placeholder="123456">
+          </div>
+
+          <div class="mb-3 d-grid">
+            <button type="submit" (click)="login()" class="btn btn-primary"
+              [disabled]="loginFormPhoneNumber.invalid">Confirmar código e ingresar</button>
+          </div>
+
+          <hr class="my-4">
+
+          <div class="text-center">
+            <div class="svg" (click)="loginWithGoogle()" title="Ingresar con Google" style="cursor: pointer;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945z" />
+              </svg>
+            </div>
+          </div>
+        }
+
+        <!-- 📧 Login con Email -->
+        @else {
+          <div class="mb-3">
+            <label for="mail" class="form-label">Usuario</label>
+            <input type="text" class="form-control" formControlName="email" name="email" placeholder="user@gmail.com"
+              [ngClass]="loginForm.get('email')?.touched && loginForm.get('email')?.invalid ? 'border-danger' : ''">
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" formControlName="password" name="password"
+              placeholder="*******"
+              [ngClass]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid ? 'border-danger' : ''">
+          </div>
+
+          <div class="mb-3 d-grid">
+            <button type="submit" (click)="login()" class="btn btn-primary"
+              [disabled]="loginForm.invalid">Entrar</button>
+          </div>
+
+          <div class="text-center mt-4">
+            <div class="svg" (click)="loginWithGoogle()" title="Ingresar con Google" style="cursor: pointer;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945z" />
+              </svg>
+            </div>
+          </div>
+        }
+      </form>
+    </div>
   </section>
 
-  <div id="recaptcha-container"></div>
-
+  <div id="recaptcha-container" class="mt-3 text-center"></div>
 </div>

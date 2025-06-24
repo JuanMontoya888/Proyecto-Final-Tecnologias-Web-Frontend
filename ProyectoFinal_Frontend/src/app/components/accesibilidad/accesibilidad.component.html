@@ -1,5 +1,3 @@
-
-
 <div class="accesibilidad-container">
   <button class="icono-btn" (click)="toggleMenu()" title="Opciones de accesibilidad">
     <!-- Ícono de accesibilidad -->
@@ -23,9 +21,8 @@
 
       <div class="menu-opciones">
         <button type="button" (click)="lecturaActiva ? pararLectura() : leerContenido()">
-  {{ lecturaActiva ? '🔇 Detener voz' : '🔊 Leer contenido' }}
-</button>
-
+          {{ lecturaActiva ? '🔇 Detener voz' : '🔊 Leer contenido' }}
+        </button>
 
         <div class="submenu">
           <button (click)="toggleTextoMenu()">🔍 Tamaño de texto</button>
@@ -40,6 +37,9 @@
         </div>
 
         <button (click)="cambiarContraste()">🌗 Cambiar contraste</button>
+
+        <!-- ✅ Nuevo botón para cambiar la fuente -->
+        <button (click)="cambiarFuente()">🅰️ Cambiar fuente</button>
       </div>
     </div>
   }
