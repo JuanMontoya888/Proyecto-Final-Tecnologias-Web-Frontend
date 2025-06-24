@@ -1,0 +1,16 @@
+{
+  "name": "hotel_system",
+  "short_name": "hotel_system",
+  "display": "standalone",
+  "scope": "./",
+  "start_url": "./",
+  "icons": [
+    {
+      "src": "icons/letter-h-small(2).png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  
+  ]
+}
