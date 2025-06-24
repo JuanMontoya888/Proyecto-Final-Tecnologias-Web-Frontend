@@ -9,25 +9,36 @@ import { EstrellasPipe } from '../../pipes/estrellas.pipe';
 import { CapitalizarPipe } from '../../pipes/capitalizar.pipe';
 import Swal from 'sweetalert2';
 import { AdminService } from '../../services/admin.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-panel-comentarios',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, EstrellasPipe, CapitalizarPipe, OracionPipe],
+  imports: [CommonModule, MatCardModule, MatButtonModule, EstrellasPipe, CapitalizarPipe, OracionPipe, ReactiveFormsModule],
   templateUrl: './panel-comentarios.component.html',
   styleUrls: ['./panel-comentarios.component.css']
 })
 export class PanelComentariosComponent implements OnInit {
   @Output() cerrar = new EventEmitter<void>();
   comentarios: any = [];
+  editandoIndex: Number = -1;
+  modifyForm!: FormGroup;
 
-  constructor(private adminService: AdminService) { }
+  constructor(private adminService: AdminService, private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.getData();
+
+    this.modifyForm = this.formBuilder.group({
+      nombre: ['', Validators.required],
+      estrellas: [0, Validators.required],
+      comentario: ['', Validators.required],
+      index: [-1],
+      id: [''],
+    });
   }
 
-  eliminarComentario(index: number) {
+  eliminarComentario(index: number): void {
     Swal.fire({
       title: '¿Eliminar este comentario?',
       text: 'Esta acción no se puede deshacer.',
@@ -48,6 +59,27 @@ export class PanelComentariosComponent implements OnInit {
           });
       }
     });
+  }
+
+  editarComentario(index: number): void {
+    const editComent = this.comentarios[index];
+    this.editandoIndex = index;
+    console.log(editComent);
+    this.modifyForm.patchValue({ ...editComent, index: index });
+
+  }
+
+  sendFormModify(): void {
+    const data = {
+      nombre: this.modifyForm.get('nombre')?.value,
+      estrellas: this.modifyForm.get('estrellas')?.value,
+      comentario: this.modifyForm.get('comentario')?.value
+    };
+    this.adminService.modifyComentariosByID(data, String(this.modifyForm.get('id')?.value)).subscribe(() => {
+      this.getData();
+    });
+
+    this.editandoIndex = -1;
   }
 
   getData(): void {

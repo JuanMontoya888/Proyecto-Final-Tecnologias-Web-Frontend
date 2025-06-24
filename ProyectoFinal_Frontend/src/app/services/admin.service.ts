@@ -10,6 +10,7 @@ export class AdminService {
   private adminSubject = new BehaviorSubject<any>(this.getAdminLogueado());
   admin$ = this.adminSubject.asObservable();
   private urapi = 'https://proyecto-final-tecnologias-web-backend-0ehw.onrender.com';
+  //private urapi = 'http://localhost:3000';
   constructor(public http: HttpClient) { }
 
   // Retornaremos un observable, para que lo espera hasta que se complete
@@ -100,6 +101,10 @@ export class AdminService {
 
   deleteComentariosByID(id: string): Observable<any> {
     return this.http.delete(this.urapi + `/deleteComentariosByID/${id}`);
+  }
+
+  modifyComentariosByID(data: any, id: String): Observable<any> {
+    return this.http.post(this.urapi + '/modifyComentariosByID', {data, id});
   }
 
   addContacto(data: any): Observable<any> {

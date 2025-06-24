@@ -3,24 +3,51 @@
 
   <div class="container d-flex flex-column gap-4 align-items-center">
     @if (comentarios.length > 0) {
-      @for (c of comentarios; track c; let i = $index) {
-        <mat-card class="w-75 space-card">
-          <mat-card-header>
-            <mat-card-title class="text-light">{{ c.nombre | capitalizar }}</mat-card-title>
-            <mat-card-subtitle class="text-warning">{{ c.estrellas | estrellas }}</mat-card-subtitle>
-          </mat-card-header>
+    @for (c of comentarios; track c; let i = $index) {
+    <mat-card class="w-75 space-card">
+      <mat-card-header>
+        <mat-card-title class="text-light">{{ c.nombre | capitalizar }}</mat-card-title>
+        <mat-card-subtitle class="text-warning">{{ c.estrellas | estrellas }}</mat-card-subtitle>
+      </mat-card-header>
 
-          <mat-card-content>
-            <p class="text-light">{{ c.comentario | oracion }}</p>
-          </mat-card-content>
+      <mat-card-content>
+        <p class="text-light">{{ c.comentario | oracion }}</p>
+      </mat-card-content>
 
-          <mat-card-actions>
-            <button mat-button color="warn" class="space-btn" (click)="eliminarComentario(i)">Eliminar</button>
-          </mat-card-actions>
-        </mat-card>
-      }
+      <mat-card-actions>
+        <button mat-button color="warn" class="space-btn" (click)="eliminarComentario(i)">Eliminar</button>
+        <button mat-raised-button color="accent" (click)="editarComentario(i)">Editar</button>
+      </mat-card-actions>
+    </mat-card>
+    }
     } @else {
-      <div class="alert alert-info">No hay comentarios registrados.</div>
+    <div class="alert alert-info">No hay comentarios registrados.</div>
+    }
+
+    @if(editandoIndex !== -1) {
+    <form [formGroup]="modifyForm" class="row g-3">
+      <div class="col-md-3" appLectorVoz>
+        <input formControlName="nombre" name="nombre" class="form-control" placeholder="Tu nombre" onlyread>
+      </div>
+      <div class="col-md-3" appLectorVoz>
+        <input formControlName="comentario" name="comentario" class="form-control" placeholder="Comentario" required>
+      </div>
+      <div class="col-md-2" appLectorVoz>
+        <select formControlName="estrellas" name="estrellas" class="form-select" required>
+          <option [value]="1" appLectorVoz>1 estrella</option>
+          <option [value]="2" appLectorVoz>2 estrellas</option>
+          <option [value]="3" appLectorVoz>3 estrellas</option>
+          <option [value]="4" appLectorVoz>4 estrellas</option>
+          <option [value]="5" appLectorVoz>5 estrellas</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-success w-100" appLectorVoz (click)="sendFormModify()">Modificar</button>
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-danger w-100" appLectorVoz (click)="editandoIndex = -1">Cancelar</button>
+      </div>
+    </form>
     }
 
     <div class="text-center mt-3">
