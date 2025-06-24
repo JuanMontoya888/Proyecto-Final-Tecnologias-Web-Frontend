@@ -27,6 +27,7 @@ import { ReservasService } from '../../services/reservas.service';
 import Swal from 'sweetalert2';
 import { ValidatorsReserv } from './validators';
 import { AdminService } from '../../services/admin.service';
+import { PaypalButtonComponent } from '../paypal-button/paypal-button.component';
 
 function nombreCompletoValidator(control: FormControl) {
   const valor = control.value || '';
@@ -74,7 +75,8 @@ function rangoFechaValidator(min: Date, max: Date) {
     MatButtonModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatIconModule
+    MatIconModule,
+    PaypalButtonComponent
   ],
   templateUrl: './reservacion.component.html',
   styleUrls: ['./reservacion.component.css']
@@ -90,6 +92,8 @@ export class ReservacionComponent implements OnInit {
   tiposHabitacion: string[] = ['Individual', 'Doble', 'Suite', 'Familiar'];
   email!: string;
   user!: string;
+  confirmSale: boolean = false;
+  isSelectedPayPal: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -112,6 +116,15 @@ export class ReservacionComponent implements OnInit {
         this.inicializarFormulario();
       }
     });
+  }
+
+  metodoChange(event: any): void {
+    this.isSelectedPayPal = event.value === 'PayPal' ? true : false;
+  }
+
+  confirmSaleFn(event: any): void {
+    this.confirmSale = event.ok;
+    Swal.fire('¡Pago Realizado!', 'Metodo de Pago PayPal.', 'success');
   }
 
   inicializarFormulario() {
@@ -221,14 +234,11 @@ export class ReservacionComponent implements OnInit {
             next: (res: any) => {
               const { id } = res;
 
-              console.log(res);
               Swal.fire('¡Reservación completada!', 'Gracias por tu preferencia.', 'success').then(() => {
                 this.reservacionForm.reset();
                 this.precioServicios = 0;
                 this.precioBase = 0;
                 this.precioTotal = 0;
-                this.router.navigate(['/hoteles']);
-
 
                 //Hacemos la llamda a la Api con los datos para que envie el correo, solo si es que la reserva fue exitosa
                 this.adminService.sendMail(this.email, nuevaReservacion, this.user)
@@ -251,6 +261,8 @@ export class ReservacionComponent implements OnInit {
                       }).then((result) => {
                         if (result.isConfirmed) {
                           this.router.navigate([`/datosReservacion/${id}`]);
+                        } else {
+                          this.router.navigate(['/hoteles']);
                         }
                       });
 

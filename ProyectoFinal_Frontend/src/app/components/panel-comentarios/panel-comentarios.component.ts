@@ -7,24 +7,24 @@ import { TESTIMONIOS_PREDETERMINADOS } from '../../models/testimonios';
 import { OracionPipe } from '../../pipes/oracion.pipe';
 import { EstrellasPipe } from '../../pipes/estrellas.pipe';
 import { CapitalizarPipe } from '../../pipes/capitalizar.pipe';
-import Swal from 'sweetalert2'; 
+import Swal from 'sweetalert2';
+import { AdminService } from '../../services/admin.service';
 
 @Component({
   selector: 'app-panel-comentarios',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, EstrellasPipe,CapitalizarPipe,OracionPipe],
+  imports: [CommonModule, MatCardModule, MatButtonModule, EstrellasPipe, CapitalizarPipe, OracionPipe],
   templateUrl: './panel-comentarios.component.html',
   styleUrls: ['./panel-comentarios.component.css']
 })
 export class PanelComentariosComponent implements OnInit {
   @Output() cerrar = new EventEmitter<void>();
-  comentarios: Testimonio[] = [];
+  comentarios: any = [];
+
+  constructor(private adminService: AdminService) { }
 
   ngOnInit(): void {
-    const guardados = localStorage.getItem('testimonios');
-    this.comentarios = guardados
-      ? JSON.parse(guardados)
-      : [...TESTIMONIOS_PREDETERMINADOS];
+    this.getData();
   }
 
   eliminarComentario(index: number) {
@@ -37,9 +37,26 @@ export class PanelComentariosComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then(result => {
       if (result.isConfirmed) {
-        this.comentarios.splice(index, 1);
-        localStorage.setItem('testimonios', JSON.stringify(this.comentarios));
-        Swal.fire('Eliminado', 'El comentario fue eliminado.', 'success');
+        this.adminService.deleteComentariosByID(this.comentarios[index].id)
+          .subscribe((res) => {
+            const { ok } = res;
+
+            if (ok) {
+              Swal.fire('Eliminado', 'El comentario fue eliminado.', 'success');
+              this.getData();
+            }
+          });
+      }
+    });
+  }
+
+  getData(): void {
+    this.adminService.getComentarios().subscribe((res) => {
+      const { ok } = res;
+
+      if (ok) {
+        const { data } = res;
+        this.comentarios = data;
       }
     });
   }

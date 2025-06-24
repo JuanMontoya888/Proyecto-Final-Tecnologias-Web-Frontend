@@ -9,6 +9,7 @@ import { OracionPipe } from '../../pipes/oracion.pipe';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { LectorVozDirective } from '../../directives/lector-voz.directive';
+import { AdminService } from '../../services/admin.service';
 
 @Component({
   selector: 'app-testimonios',
@@ -20,11 +21,18 @@ export class TestimoniosComponent {
   testimonios: Testimonio[] = [];
   nuevo: Testimonio = { nombre: '', comentario: '', estrellas: 5 };
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private adminService: AdminService) { }
 
   ngOnInit() {
-    const guardados = localStorage.getItem('testimonios');
-    this.testimonios = guardados ? JSON.parse(guardados) : [...TESTIMONIOS_PREDETERMINADOS];
+    this.adminService.getComentarios()
+      .subscribe(async (res: any) => {
+        const { ok } = res;
+
+        if (ok) {
+          const { data } = res;
+          this.testimonios = data;
+        }
+      });
   }
 
   agregarTestimonio() {
@@ -32,7 +40,7 @@ export class TestimoniosComponent {
     if (!userLogueado) {
       Swal.fire({
         title: 'No autorizado',
-        text: 'Debes iniciar sesión para hacer una reservación. ¿Deseas iniciar sesión ahora?',
+        text: 'Debes iniciar sesión para agregar un testimonio. ¿Deseas iniciar sesión ahora?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Iniciar sesión',
@@ -47,7 +55,48 @@ export class TestimoniosComponent {
 
     if (this.nuevo.nombre && this.nuevo.comentario) {
       this.testimonios.push({ ...this.nuevo });
-      localStorage.setItem('testimonios', JSON.stringify(this.testimonios));
+
+      this.adminService.addComentario(this.nuevo)
+        .subscribe((res: any) => {
+          const { ok } = res;
+
+          if (ok) {
+            Swal.fire({
+              title: '¡Comentario recibido!',
+              text: 'Gracias por compartir tu opinión. Ha sido agregado exitosamente.',
+              icon: 'success',
+              confirmButtonText: 'Aceptar',
+              confirmButtonColor: '#3085d6',
+              backdrop: true,
+              timer: 3000,
+              timerProgressBar: true,
+              showClass: {
+                popup: 'swal2-show animate__animated animate__fadeInDown'
+              },
+              hideClass: {
+                popup: 'swal2-hide animate__animated animate__fadeOutUp'
+              }
+            });
+          } else {
+            Swal.fire({
+              title: 'Error al enviar',
+              text: 'Ocurrió un problema al intentar agregar tu comentario. Intenta nuevamente.',
+              icon: 'error',
+              confirmButtonText: 'Reintentar',
+              confirmButtonColor: '#d33',
+              backdrop: true,
+              showClass: {
+                popup: 'swal2-show animate__animated animate__shakeX'
+              },
+              hideClass: {
+                popup: 'swal2-hide animate__animated animate__fadeOut'
+              }
+            });
+          }
+
+        });
+
+
       this.nuevo = { nombre: '', comentario: '', estrellas: 5 };
     }
   }
