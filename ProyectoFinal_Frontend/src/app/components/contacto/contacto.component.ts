@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Contacto } from '../../models/contacto';
 import { Router } from '@angular/router';
+import { AdminService } from '../../services/admin.service';
 
 @Component({
   selector: 'app-contacto',
@@ -20,14 +21,14 @@ export class ContactoComponent {
     mensaje: ''
   };
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private adminService: AdminService) { }
 
   enviar(formulario: any) {
     const userLogueado = localStorage.getItem('userLogueado');
     if (!userLogueado) {
       Swal.fire({
         title: 'No autorizado',
-        text: 'Debes iniciar sesión para hacer una reservación. ¿Deseas iniciar sesión ahora?',
+        text: 'Debes iniciar sesión para enviar un comentario. ¿Deseas iniciar sesión ahora?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Iniciar sesión',
@@ -50,17 +51,45 @@ export class ContactoComponent {
         cancelButtonText: 'Cancelar'
       }).then(result => {
         if (result.isConfirmed) {
-          // Recuperar solicitudes anteriores, si existen
-          const contactosGuardados = localStorage.getItem('contactos');
-          const contactos: Contacto[] = contactosGuardados ? JSON.parse(contactosGuardados) : [];
+          this.adminService.addContacto(this.contacto).subscribe((res) => {
+            const { ok } = res;
+
+            if (ok) {
+              Swal.fire({
+                title: '¡Solicitud enviada!',
+                text: 'Gracias por tu interés. Nos pondremos en contacto contigo lo antes posible.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#3085d6',
+                backdrop: true,
+                timer: 3000,
+                timerProgressBar: true,
+                showClass: {
+                  popup: 'swal2-show animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                  popup: 'swal2-hide animate__animated animate__fadeOutUp'
+                }
+              });
+            } else {
+              Swal.fire({
+                title: 'Error',
+                text: 'No se pudo enviar tu solicitud. Inténtalo nuevamente más tarde.',
+                icon: 'error',
+                confirmButtonText: 'Reintentar',
+                confirmButtonColor: '#d33',
+                backdrop: true,
+                showClass: {
+                  popup: 'swal2-show animate__animated animate__shakeX'
+                },
+                hideClass: {
+                  popup: 'swal2-hide animate__animated animate__fadeOut'
+                }
+              });
+            }
+          });
 
 
-          contactos.push({ ...this.contacto });
-
-          // Guardar el nuevo array actualizado
-          localStorage.setItem('contactos', JSON.stringify(contactos));
-
-          Swal.fire('¡Solicitud enviada!', 'Te contactaremos pronto.', 'success');
 
           formulario.reset();
         }

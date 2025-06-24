@@ -21,21 +21,21 @@ export class QrViewComponent {
 
   //variables
   reservacion!: Reservacion;
-  qrLink: string = 'https://localhost:4200/infoReservacion:';
+  qrLink: string = 'https://proyecto-final-desarroll-7f79f.web.app/infoReservacion/';
 
-  constructor(private route: ActivatedRoute, private adminService: AdminService) {
+  constructor(private route: ActivatedRoute, private adminService: AdminService) { }
 
-  }
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     this.adminService.getReservaByID(String(id))
       .subscribe((res) => {
-       this.reservacion=res.data; 
-       this.reservacion.fechaFin=this.reservacion.fechaFin.substring(0,10);
-       this.reservacion.fechaInicio=this.reservacion.fechaInicio.substring(0,10);
+        this.reservacion = res.data;
+        this.reservacion.fechaFin = this.reservacion.fechaFin.substring(0, 10);
+        this.reservacion.fechaInicio = this.reservacion.fechaInicio.substring(0, 10);
       });
 
     this.qrLink += id;
+    console.log(this.qrLink);
   }
 
 }

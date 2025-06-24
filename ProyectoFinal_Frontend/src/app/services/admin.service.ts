@@ -9,7 +9,7 @@ export class AdminService {
 
   private adminSubject = new BehaviorSubject<any>(this.getAdminLogueado());
   admin$ = this.adminSubject.asObservable();
-  private urapi = 'http://127.0.0.1:3000';
+  private urapi = 'https://proyecto-final-tecnologias-web-backend-0ehw.onrender.com';
   constructor(public http: HttpClient) { }
 
   // Retornaremos un observable, para que lo espera hasta que se complete
@@ -88,6 +88,30 @@ export class AdminService {
 
   getReservaByID(query: string): Observable<any> {
     return this.http.post(this.urapi + '/getReservaBy', { query });
+  }
+
+  addComentario(data: any): Observable<any> {
+    return this.http.post(this.urapi + '/addComentario', { data });
+  }
+
+  getComentarios(): Observable<any> {
+    return this.http.get(this.urapi + '/getComentarios');
+  }
+
+  deleteComentariosByID(id: string): Observable<any> {
+    return this.http.delete(this.urapi + `/deleteComentariosByID/${id}`);
+  }
+
+  addContacto(data: any): Observable<any> {
+    return this.http.post(this.urapi + '/addContacto', { data });
+  }
+
+  getContactos(): Observable<any> {
+    return this.http.get(this.urapi + '/getContactos');
+  }
+
+  deleteContactosByID(id: string): Observable<any> {
+    return this.http.delete(this.urapi + `/deleteContactosByID/${id}`);
   }
 
 }
